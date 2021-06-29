@@ -1,65 +1,142 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import {
+  Button,
+  Box,
+  Flex,
+  Divider,
+  Stack,
+  Icon,
+  HStack,
+  useColorModeValue,
+  Text,
+  useDisclosure,
+  Heading,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import CardMenu from "../components/CardMenu";
+import CardView from "../components/CardView";
+import coinService from "../services/coin";
 
-export default function Home() {
+const getTrendingCoins = async () => {
+  const coinList = await coinService.getTrending();
+  const coinData = coinList.map((coin) => coinService.getCoinData(coin));
+  return await Promise.all(coinData);
+};
+
+export const getStaticProps = async () => {
+  const trendingCoins = await getTrendingCoins();
+
+  return {
+    props: { trendingCoins },
+    revalidate: 10,
+  };
+};
+
+//  FRAMER MOTION
+const StackVariants = {
+  hidden: {
+    y: 50,
+    opacity: 0,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 50,
+    },
+  },
+};
+
+const CardVariants = {
+  hidden: {
+    y: 50,
+    opacity: 0,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      delay: 0.33,
+      type: "spring",
+      stiffness: 70,
+      mass: 0.6,
+    },
+  },
+};
+
+export default function Home({
+  trendingCoins,
+  topCoins,
+  biggestGainers,
+  biggestLosers,
+}) {
+  const categories = [
+    {
+      heading: "Trending",
+      context: trendingCoins,
+    },
+    {
+      heading: "Top Ten",
+      context: topCoins,
+    },
+    {
+      heading: "Biggest Gainers",
+      context: biggestGainers,
+    },
+    {
+      heading: "Biggest Losers",
+      context: biggestLosers,
+    },
+  ];
+  const [category, setCategory] = useState(categories[0]);
+
+  const handleCategoryChange = (e) => {
+    const items = categories;
+    items.filter((category) => category.heading === e.target.value);
+  };
+
+  const MotionStack = motion(Stack);
+  const MotionHStack = motion(HStack);
+  const MotionBox = motion(Box);
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <>
+      <Stack spacing={2}>
+        <Text fontWeight={600} fontSize="md">
+          Today's Cryptocurrency Prices
+        </Text>
+        <Text fontSize="sm">
+          {`The global crypto market is at $1.38T, a 3.95% increase over the last day`}
+        </Text>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Divider pt={2} />
+        <HStack
+          onClick={handleCategoryChange}
+          spacing={[2, null, null, 4]}
+          my={["0.25rem", null, null, "0.5rem"]}
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+          {categories.map((category) => (
+            <Button
+              boxShadow="sm"
+              bg={useColorModeValue("gray.100", "gray.700")}
+              fontWeight={500}
+              key={category.heading}
+              value={category.heading}
+              size="xs"
+              fontSize={["11px", null, null, "xs"]}
+            >
+              {category.heading}
+            </Button>
+          ))}
+        </HStack>
+
+        <CardView
+          heading={category.heading}
+          coins={category.context}
+          variants={CardVariants}
+        />
+      </Stack>
+    </>
+  );
 }
