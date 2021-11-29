@@ -1,14 +1,20 @@
-import Navbar from "./newNav";
+import Navbar from "./Navbar";
 import { Box, useColorModeValue } from "@chakra-ui/react";
 
 const Layout = ({ children }) => {
   return (
     <>
-      <Box h="100vh" bg={useColorModeValue("gray.50", "gray.800")}>
-        <Navbar />
-        <Box px={[4, null, 6]} pt={4} transition="all 0.2s">
-          {children}
-        </Box>
+      <Navbar />
+      <Box
+        bg={useColorModeValue("gray.50", "gray.900")}
+        bgGradient={useColorModeValue(
+          "",
+          "linear(to-b, gray.800, gray.900, gray.900)"
+        )}
+        px={[4, null, null, 6]}
+        py={[4, null, null, 6]}
+      >
+        {children}
       </Box>
     </>
   );
