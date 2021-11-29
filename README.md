@@ -1,3 +1,4 @@
-Crypto-Tracker
+WORK IN PROGRESS
 
-I created this crypto-tracker using Next.js, Chakra-UI and the coingecko API.
+A crypto-tracker using Next.js, Chakra-UI and the coingecko API.
+
