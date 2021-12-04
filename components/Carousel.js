@@ -19,7 +19,10 @@ import {
 const MotionCenter = motion(Center);
 
 const Carousel = ({ data }) => {
-  const [isLargerThan428] = useMediaQuery("(min-width: 429px)");
+  const [isLargerThan428] = useMediaQuery("(min-width: 428px)");
+  const [isLargerThan810] = useMediaQuery("(min-width: 810px)");
+  const [isLargerThan1100] = useMediaQuery("(min-width: 1100px)");
+  const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
 
   const [isArrowDisplayed, setIsArrowDisplayed] = useState({
     left: false,
@@ -29,6 +32,7 @@ const Carousel = ({ data }) => {
   const handleScroll = (e) => {
     const scrollPosition = e.target.scrollLeft;
 
+    console.log(scrollPosition);
     if (scrollPosition === 0) {
       return setIsArrowDisplayed({
         ...isArrowDisplayed,
@@ -38,6 +42,22 @@ const Carousel = ({ data }) => {
     }
 
     if (isLargerThan428 && scrollPosition >= 1200) {
+      return setIsArrowDisplayed({
+        ...isArrowDisplayed,
+        left: true,
+        right: false,
+      });
+    }
+
+    if (isLargerThan810 && !isLargerThan1100 && scrollPosition >= 950) {
+      return setIsArrowDisplayed({
+        ...isArrowDisplayed,
+        left: true,
+        right: false,
+      });
+    }
+
+    if (isLargerThan1100 && !isLargerThan1280 && scrollPosition >= 650) {
       return setIsArrowDisplayed({
         ...isArrowDisplayed,
         left: true,
@@ -55,7 +75,7 @@ const Carousel = ({ data }) => {
   };
 
   return (
-    <Flex maxW="780px" overflow="hidden" pos="relative">
+    <Flex overflow="hidden" pos="relative">
       <Flex
         id="carousel"
         overflowX="scroll"

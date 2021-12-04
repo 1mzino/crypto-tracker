@@ -25,13 +25,61 @@ import { useContext } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 import { CurrencyContext } from "../contexts/CurrencyContext";
-import { SupportedCurrenciesContext } from "../contexts/SupportedCurrenciesContext";
 
 import CurrencyIcon from "./CurrencyIcon";
 
+const supportedCurrencies = [
+  {
+    name: "Pound Sterling",
+    symbol: "£",
+    abv: "GBP",
+    type: "FIAT",
+    popular: true,
+  },
+  {
+    name: "United States Dollar",
+    symbol: "$",
+    abv: "USD",
+    type: "FIAT",
+    popular: true,
+  },
+  {
+    name: "Euro",
+    symbol: "€",
+    abv: "EUR",
+    type: "FIAT",
+    popular: true,
+  },
+  {
+    name: "Bitcoin",
+    symbol: "BTC",
+    abv: "BTC",
+    type: "CRYPTO",
+    popular: true,
+  },
+  {
+    name: "Ethereum",
+    symbol: "ETH",
+    abv: "ETH",
+    type: "CRYPTO",
+    popular: true,
+  },
+  {
+    name: "Bits",
+    symbol: "BITS",
+    abv: "BITS",
+    type: "BITCOIN",
+  },
+  {
+    name: "Satoshi",
+    symbol: "SATS",
+    abv: "SATS",
+    type: "BITCOIN",
+  },
+];
+
 const CurrencySelector = ({ onClose }) => {
   const { currency, dispatch } = useContext(CurrencyContext);
-  const { supportedCurrencies } = useContext(SupportedCurrenciesContext);
 
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
 
@@ -51,19 +99,16 @@ const CurrencySelector = ({ onClose }) => {
       </HStack>
 
       <Modal
+        overflow="hidden"
         size={isDesktop ? "3xl" : "full"}
         isOpen={isOpenCurrencyModal}
         onClose={onCloseCurrencyModal}
         borderRadius={isDesktop ? "xl" : "none"}
       >
-        <ModalOverlay bg="blackAlpha.800" />
+        <ModalOverlay />
         <ModalContent
           borderRadius={isDesktop ? "xl" : "none"}
-          bg={useColorModeValue("white", "gray.900")}
-          bgGradient={useColorModeValue(
-            "",
-            "linear(to-b, gray.800, gray.800, gray.900)"
-          )}
+          bg={useColorModeValue("white", "gray.800")}
           my={isDesktop ? "5rem" : 0}
         >
           <ModalHeader

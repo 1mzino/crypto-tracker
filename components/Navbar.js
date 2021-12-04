@@ -1,4 +1,8 @@
 import {
+  useDisclosure,
+  useMediaQuery,
+  useColorModeValue,
+  useColorMode,
   Box,
   Flex,
   HStack,
@@ -6,7 +10,6 @@ import {
   Button,
   Center,
   Icon,
-  useDisclosure,
   Stack,
   Drawer,
   DrawerBody,
@@ -14,12 +17,6 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerCloseButton,
-  useColorModeValue,
-  useColorMode,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   Spacer,
   Divider,
   Text,
@@ -64,6 +61,7 @@ const navItems = [
 ];
 
 const Navbar = () => {
+  const [isLargerThan991] = useMediaQuery("(min-width: 991px)");
   const { currency, dispatch } = useContext(CurrencyContext);
   const { marketData, isLoading } = useGlobalData();
 
@@ -130,22 +128,21 @@ const Navbar = () => {
 
   return (
     <>
-      {/* DESKTOP */}
-      <Stack
+      <Box
+        as="header"
+        display={["none", null, null, "block"]}
         bg={useColorModeValue("white", "gray.900")}
-        spacing={0}
-        zIndex="9999999"
-        display={["none", null, null, "flex"]}
         userSelect="none"
       >
         <HStack
+          as="section"
           h="32px"
           borderBottom="1px solid"
           borderColor="inherit"
-          px={[4, null, null, 10]}
+          px={8}
           py={2}
           fontWeight={500}
-          spacing={[4]}
+          spacing={4}
           fontSize="10.5px"
         >
           {marketData ? <Text>{getMarketChange(marketData)}</Text> : null}
@@ -176,14 +173,21 @@ const Navbar = () => {
               thickness="1.5px"
               color="blue.500"
             />
-          ) : (
+          ) : currency.type !== "CRYPTO" ? (
             <Text as="span" color="blue.500">
-              {currency.symbol}
-              {marketData.market_cap[
+              {`${currency.symbol}${marketData.market_cap[
                 currency.shorthand.toLowerCase()
               ].toLocaleString(undefined, {
                 maximumFractionDigits: 2,
-              })}
+              })}`}
+            </Text>
+          ) : (
+            <Text as="span" color="blue.500">
+              {`${marketData.market_cap[
+                currency.shorthand.toLowerCase()
+              ].toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })} ${currency.symbol}`}
             </Text>
           )}
 
@@ -197,14 +201,21 @@ const Navbar = () => {
               thickness="1.5px"
               color="blue.500"
             />
-          ) : (
+          ) : currency.type !== "CRYPTO" ? (
             <Text as="span" color="blue.500">
-              {currency.symbol}
-              {marketData.volume[
+              {`${currency.symbol}${marketData.volume[
                 currency.shorthand.toLowerCase()
               ].toLocaleString(undefined, {
                 maximumFractionDigits: 2,
-              })}
+              })}`}
+            </Text>
+          ) : (
+            <Text as="span" color="blue.500">
+              {`${marketData.volume[
+                currency.shorthand.toLowerCase()
+              ].toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })} ${currency.symbol}`}
             </Text>
           )}
 
@@ -233,15 +244,17 @@ const Navbar = () => {
             </Text>
           )}
         </HStack>
+
         <HStack
+          as="nav"
           borderBottom="1px solid"
           borderColor="inherit"
           pos="sticky"
           top="0"
           align="center"
-          px={10}
+          px={8}
           py={4}
-          spacing={[null, null, null, 16]}
+          spacing={16}
         >
           {navItems.map((item) => (
             <Link key={item.id} href={`${item.url}`}>
@@ -283,7 +296,7 @@ const Navbar = () => {
                 <Icon h="14px" w="14px" as={useColorModeValue(FaMoon, FaSun)} />
               </Center>
             </Box>
-            <Box zIndex={999999}>
+            <Box>
               <CurrencySelector
                 onClose={onClose}
                 currency={currency}
@@ -303,136 +316,135 @@ const Navbar = () => {
           bg="blue.500"
           borderRadius="md"
         />
-      </Stack>
+      </Box>
 
-      {/* MOBILE */}
+      <Box as="header" display={["block", null, null, "none"]}>
+        <HStack
+          as="nav"
+          position="sticky"
+          top="0"
+          zIndex={999}
+          bg={useColorModeValue("white", "gray.900")}
+          borderBottom="1px solid"
+          borderColor="inherit"
+          justify="flex-end"
+          px={4}
+          py={2}
+        >
+          <IconButton size="md" px={0} bg="none" icon={<FiSearch />} />
+          {/* <Icon h="20px" w="20px" as={FiSearch} /> */}
 
-      <HStack
-        display={["flex", null, null, "none"]}
-        bg={useColorModeValue("white", "gray.900")}
-        zIndex="100"
-        position="sticky"
-        top="0"
-        borderBottom="1px solid"
-        borderColor="inherit"
-        justify="flex-end"
-        px={4}
-        py={2}
-      >
-        <IconButton size="md" px={0} bg="none" icon={<FiSearch />} />
-        {/* <Icon h="20px" w="20px" as={FiSearch} /> */}
+          <Button ref={btnRef} onClick={onOpen} px={0} bg="none">
+            <Center>
+              <Icon h="20px" w="20px" as={HiOutlineMenuAlt3} />
+            </Center>
+          </Button>
+        </HStack>
 
-        <Button ref={btnRef} onClick={onOpen} px={0} bg="none">
-          <Center>
-            <Icon h="20px" w="20px" as={HiOutlineMenuAlt3} />
-          </Center>
-        </Button>
-      </HStack>
-      <HStack
-        sx={{
-          "&::-webkit-scrollbar": {
-            display: "none",
-            width: 0,
-          },
-          scrollbarWidth: "none",
-        }}
-        display={["flex", null, null, "none"]}
-        bg={useColorModeValue("white", "gray.900")}
-        borderBottom="1px solid"
-        borderColor="inherit"
-        overflowX="auto"
-        overflowY="hidden"
-        whiteSpace="nowrap"
-        h="32px"
-        px={[4, null, null, 10]}
-        py={2}
-        spacing={2}
-        fontSize="10.5px"
-      >
-        <Text fontWeight={500}>{`Cryptos: `}</Text>
-        {isLoading ? (
-          <Spinner
-            mx={1.5}
-            h="10px"
-            w="10px"
-            speed="0.75s"
-            thickness="1.5px"
-            color="blue.500"
-          />
-        ) : (
-          <Text fontWeight={600} as="span" color="blue.500">
-            {marketData.active_cryptos}
-          </Text>
-        )}
+        <HStack
+          sx={{
+            "&::-webkit-scrollbar": {
+              display: "none",
+              width: 0,
+            },
+            scrollbarWidth: "none",
+          }}
+          bg={useColorModeValue("white", "gray.900")}
+          borderBottom="1px solid"
+          borderColor="inherit"
+          overflowX="auto"
+          overflowY="hidden"
+          whiteSpace="nowrap"
+          h="32px"
+          px={4}
+          py={2}
+          spacing={2}
+          fontSize="10.5px"
+        >
+          <Text fontWeight={500}>{`Cryptos: `}</Text>
+          {isLoading ? (
+            <Spinner
+              mx={1.5}
+              h="10px"
+              w="10px"
+              speed="0.75s"
+              thickness="1.5px"
+              color="blue.500"
+            />
+          ) : (
+            <Text fontWeight={600} as="span" color="blue.500">
+              {marketData.active_cryptos}
+            </Text>
+          )}
 
-        <Text fontWeight={500}>{`Market Cap: `}</Text>
-        {isLoading ? (
-          <Spinner
-            mx={1.5}
-            h="10px"
-            w="10px"
-            speed="0.75s"
-            thickness="1.5px"
-            color="blue.500"
-          />
-        ) : (
-          <Text fontWeight={600} as="span" color="blue.500">
-            {currency.symbol}
-            {marketData.market_cap[
-              currency.shorthand.toLowerCase()
-            ].toLocaleString(undefined, {
-              maximumFractionDigits: 2,
-            })}
-          </Text>
-        )}
-
-        <Text as="span" fontWeight={500}>{`24h Volume: `}</Text>
-        {isLoading ? (
-          <Spinner
-            mx={1.5}
-            h="10px"
-            w="10px"
-            speed="0.75s"
-            thickness="1.5px"
-            color="blue.500"
-          />
-        ) : (
-          <Text fontWeight={600} as="span" color="blue.500">
-            {currency.symbol}
-            {marketData.volume[currency.shorthand.toLowerCase()].toLocaleString(
-              undefined,
-              {
+          <Text fontWeight={500}>{`Market Cap: `}</Text>
+          {isLoading ? (
+            <Spinner
+              mx={1.5}
+              h="10px"
+              w="10px"
+              speed="0.75s"
+              thickness="1.5px"
+              color="blue.500"
+            />
+          ) : (
+            <Text fontWeight={600} as="span" color="blue.500">
+              {currency.symbol}
+              {marketData.market_cap[
+                currency.shorthand.toLowerCase()
+              ].toLocaleString(undefined, {
                 maximumFractionDigits: 2,
-              }
-            )}
-          </Text>
-        )}
+              })}
+            </Text>
+          )}
 
-        <Text fontWeight={500}>{`Dominance: `}</Text>
-        {isLoading ? (
-          <Spinner
-            mx={1.5}
-            h="10px"
-            w="10px"
-            speed="0.75s"
-            thickness="1.5px"
-            color="blue.500"
-          />
-        ) : (
-          <Text as="span" fontWeight={600} color="blue.500">
-            {`${Object.keys(
-              marketData.dominance
-            )[0]?.toUpperCase()}: ${marketData.dominance[
-              Object.keys(marketData.dominance)[0]
-            ]?.toFixed(1)}%`}{" "}
-            {`${Object.keys(
-              marketData.dominance
-            )[1]?.toUpperCase()}: ${marketData.dominance[
-              Object.keys(marketData.dominance)[1]
-            ]?.toFixed(1)}%`}
-          </Text>
-        )}
-      </HStack>
+          <Text as="span" fontWeight={500}>{`24h Volume: `}</Text>
+          {isLoading ? (
+            <Spinner
+              mx={1.5}
+              h="10px"
+              w="10px"
+              speed="0.75s"
+              thickness="1.5px"
+              color="blue.500"
+            />
+          ) : (
+            <Text fontWeight={600} as="span" color="blue.500">
+              {currency.symbol}
+              {marketData.volume[
+                currency.shorthand.toLowerCase()
+              ].toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })}
+            </Text>
+          )}
+
+          <Text fontWeight={500}>{`Dominance: `}</Text>
+          {isLoading ? (
+            <Spinner
+              mx={1.5}
+              h="10px"
+              w="10px"
+              speed="0.75s"
+              thickness="1.5px"
+              color="blue.500"
+            />
+          ) : (
+            <Text as="span" fontWeight={600} color="blue.500">
+              {`${Object.keys(
+                marketData.dominance
+              )[0]?.toUpperCase()}: ${marketData.dominance[
+                Object.keys(marketData.dominance)[0]
+              ]?.toFixed(1)}%`}{" "}
+              {`${Object.keys(
+                marketData.dominance
+              )[1]?.toUpperCase()}: ${marketData.dominance[
+                Object.keys(marketData.dominance)[1]
+              ]?.toFixed(1)}%`}
+            </Text>
+          )}
+        </HStack>
+      </Box>
 
       <Drawer
         isOpen={isOpen}

@@ -8,7 +8,9 @@ import {
   Center,
   Button,
   IconButton,
+  Box,
   Spinner,
+  Spacer,
 } from "@chakra-ui/react";
 
 import { useState, useContext, useEffect } from "react";
@@ -95,6 +97,8 @@ export default function Home({ fallback }) {
   const [pageIndex, setPageIndex] = useState(1);
   const { currency } = useContext(CurrencyContext);
 
+  console.log(currency);
+
   const { data: globalMarketData } = useSWR(
     "https://api.coingecko.com/api/v3/global",
     globalMarketDataFetcher,
@@ -118,14 +122,15 @@ export default function Home({ fallback }) {
   }, []);
 
   return (
-    <Stack>
+    <>
       {/* Intro text and trending coins displayed on carousel */}
       <Stack
+        as="section"
         spacing={[4, null, null, null, 24]}
         direction={["column", null, null, null, "row"]}
       >
-        <Stack pt={[0, null, null, 2]} minW={[null, null, "max-content"]}>
-          <Heading fontWeight={600} fontSize={["md", null, "2xl"]}>
+        <Stack minW={[null, null, "max-content"]}>
+          <Heading fontWeight={600} fontSize={["md", "xl", "2xl"]}>
             Todays Cryptocurrency prices
           </Heading>
 
@@ -134,17 +139,27 @@ export default function Home({ fallback }) {
             fontSize={["sm", null, "14.5px"]}
           >
             The global crypto market cap is{" "}
-            <Text as="span" fontWeight={600}>
-              {`${currency.symbol}${getRoundedNum(
-                globalMarketData.market_cap[currency.shorthand.toLowerCase()]
-              ).toString()},`}
-            </Text>{" "}
+            {currency.type !== "CRYPTO" ? (
+              <Text as="span" fontWeight={600}>
+                {`${currency.symbol}${getRoundedNum(
+                  globalMarketData.market_cap[currency.shorthand.toLowerCase()]
+                ).toString()},`}
+              </Text>
+            ) : (
+              <Text as="span" fontWeight={600}>
+                {`${getRoundedNum(
+                  globalMarketData.market_cap[currency.shorthand.toLowerCase()]
+                ).toString()} ${currency.symbol},`}
+              </Text>
+            )}{" "}
             a {getColouredNum(globalMarketData.market_cap_change)}{" "}
             {globalMarketData.market_cap_change < 0
               ? " decrease over the last day. "
               : " increase over the last day. "}
           </Text>
         </Stack>
+
+        <Spacer />
 
         <Carousel data={trendingCoins} />
       </Stack>
@@ -156,7 +171,7 @@ export default function Home({ fallback }) {
         </Center>
       ) : (
         <>
-          <HStack pt={[2, null, 4]}>
+          <HStack>
             <Button size="sm" fontSize="xs">
               <HStack>
                 <Icon h="14px" w="14px" color="gray.500" as={GoSettings} />
@@ -217,6 +232,6 @@ export default function Home({ fallback }) {
           </HStack>
         </>
       )}
-    </Stack>
+    </>
   );
 }

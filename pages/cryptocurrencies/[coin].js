@@ -1,4 +1,5 @@
 import {
+  useMediaQuery,
   useColorModeValue,
   HStack,
   Center,
@@ -11,9 +12,6 @@ import {
   Text,
   Icon,
   Divider,
-  Button,
-  useDisclosure,
-  Collapse,
 } from "@chakra-ui/react";
 
 import useSWR from "swr";
@@ -81,24 +79,25 @@ const coinDetail = () => {
     <Stack
       bg={useColorModeValue("white", "gray.900")}
       borderRadius="xl"
-      py={4}
-      px={4}
-      spacing={4}
+      px={[4, null, null, 4]}
+      py={[4, null, null, 6]}
+      spacing={[4, null, null, 6]}
     >
       {/* Coin Logo and Name */}
       <HStack spacing={4}>
         <Image
+          ignoreFallback
           userSelect="none"
           borderRadius="lg"
           cursor="pointer"
           objectFit="fill"
-          w="32px"
-          h="32px"
+          w={["32px", null, null, "36px"]}
+          h={["32px", null, null, "36px"]}
           borderRadius="20%"
           src={coin.image}
           alt=""
         />
-        <Heading as="h1" fontSize="xl">
+        <Heading as="h1" fontSize={["2xl", null, null, "3xl"]}>
           {coin.name}
         </Heading>
       </HStack>

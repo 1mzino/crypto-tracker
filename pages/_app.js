@@ -5,7 +5,6 @@ import Layout from "../components/Layout";
 import theme from "../styles/theme";
 
 import { CurrencyProvider } from "../contexts/CurrencyContext";
-import { SupportedCurrenciesProvider } from "../contexts/SupportedCurrenciesContext";
 
 import "../styles/nprogress.css";
 import nProgress from "nprogress";
@@ -28,15 +27,13 @@ export default function App({ Component, pageProps }) {
       </Head>
 
       <CurrencyProvider>
-        <SupportedCurrenciesProvider>
-          <ChakraProvider theme={theme}>
-            <SWRConfig>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </SWRConfig>
-          </ChakraProvider>
-        </SupportedCurrenciesProvider>
+        <ChakraProvider theme={theme}>
+          <SWRConfig>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </SWRConfig>
+        </ChakraProvider>
       </CurrencyProvider>
     </>
   );
