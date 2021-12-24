@@ -1,147 +1,100 @@
 import {
-  useMediaQuery,
-  useDisclosure,
-  useColorModeValue,
   Stack,
-  Button,
+  Flex,
   Text,
+  Icon,
   Divider,
-  Spacer,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  Box,
+  useColorModeValue,
+  Accordion,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  UnorderedList,
+  ListItem,
+  HStack,
+  Button,
 } from "@chakra-ui/react";
 
-import { BsChevronRight } from "react-icons/bs";
+import AccordionItem from "./AccordionItem";
 
-const CoinLinks = ({ coin }) => {
-  const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
+import { AiOutlineLink } from "react-icons/ai";
+import { FiExternalLink } from "react-icons/fi";
+import { BiLinkAlt } from "react-icons/bi";
+import {
+  RiFilePaper2Line,
+  RiChat1Line,
+  RiWindowLine,
+  RiLinksLine,
+  RiWindowFill,
+} from "react-icons/ri";
+// import { getAllLinks } from "../utils/getAllLinks";
+import GetAllLinks from "../utils/getAllLinks";
+import { PopoverItem } from "./PopoverItem";
 
-  const {
-    isOpen: isLinkModalOpen,
-    onOpen: onLinkModalOpen,
-    onClose: onLinkModalClose,
-  } = useDisclosure();
+import { useRouter } from "next/router";
 
-  const {
-    isOpen: isContractModalOpen,
-    onOpen: onContractModalOpen,
-    onClose: onContractModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isTagsModalOpen,
-    onOpen: onTagsModalOpen,
-    onClose: onTagsModalClose,
-  } = useDisclosure();
-
-  if (isLargerThan1280) return <div>DESKTOP VERSION links</div>;
-
+const CoinLinks = ({ links }) => {
+  const router = useRouter();
+  const pushRouter = (url) => {
+    router.push(url);
+  };
   return (
-    <Stack>
-      <Divider />
-      <Button
-        onClick={onLinkModalOpen}
-        ps={1}
-        pe={2}
-        userSelect="none"
-        bg="none"
-        _hover={{ bg: "none" }}
-        _active={{ bg: "none" }}
-        fontSize="small"
+    <>
+      {/* MOBILE */}
+      <Accordion
+        display={["flex", null, "none"]}
+        borderBottom="none"
+        allowToggle
+        mt={4}
       >
-        <Text fontWeight={600}>Links</Text>
+        <Stack w="100%" spacing={1} divider={<Divider />}>
+          <AccordionItem title={`Website`} icon={BiLinkAlt}>
+            <GetAllLinks links={links.homepage} handleClick={pushRouter} />
+          </AccordionItem>
 
-        <Spacer />
-        <BsChevronRight />
-      </Button>
+          <AccordionItem title={`Contracts`} icon={RiFilePaper2Line}>
+            <GetAllLinks links={links.blockchain} handleClick={pushRouter} />
+          </AccordionItem>
 
-      <Modal isOpen={isLinkModalOpen} onClose={onLinkModalClose}>
-        <ModalOverlay />
-        <ModalContent
-          bg={useColorModeValue("gray.50", "gray.900")}
-          borderRadius={0}
-          my={0}
-          minH="100%"
-          minW="100%"
-        >
-          <ModalHeader>{`${coin.name} Links`}</ModalHeader>
-          <ModalCloseButton />
+          {(links.chat.filter((link) => link !== "").length > 0 ||
+            links.forum.filter((link) => link !== "").length > 0) && (
+            <AccordionItem title={`Forums and Chats`} icon={RiWindowFill}>
+              <GetAllLinks links={links.forum} handleClick={pushRouter} />
+              <GetAllLinks links={links.chat} handleClick={pushRouter} />
+            </AccordionItem>
+          )}
+        </Stack>
+      </Accordion>
 
-          <ModalBody>links</ModalBody>
-        </ModalContent>
-      </Modal>
-
-      <Divider />
-      <Button
-        onClick={onContractModalOpen}
-        ps={1}
-        pe={2}
-        userSelect="none"
-        bg="none"
-        _hover={{ bg: "none" }}
-        _active={{ bg: "none" }}
-        fontSize="small"
+      {/* DESKTOP */}
+      <HStack
+        spacing={3}
+        display={["none", null, "flex"]}
+        flexBasis={"40%"}
+        my={2}
       >
-        <Text fontWeight={600}>Contracts</Text>
+        {links.homepage.filter((link) => link != "").length >= 0 && (
+          <PopoverItem title={`Website`} icon={BiLinkAlt}>
+            <GetAllLinks links={links.homepage} handleClick={pushRouter} />
+          </PopoverItem>
+        )}
 
-        <Spacer />
-        <BsChevronRight />
-      </Button>
+        {links.blockchain.filter((link) => link != "").length > 1 && (
+          <PopoverItem title={`Contracts`} icon={RiFilePaper2Line}>
+            <GetAllLinks links={links.blockchain} handleClick={pushRouter} />
+          </PopoverItem>
+        )}
 
-      <Modal isOpen={isContractModalOpen} onClose={onContractModalClose}>
-        <ModalOverlay />
-        <ModalContent
-          bg={useColorModeValue("gray.50", "gray.900")}
-          borderRadius={0}
-          my={0}
-          minH="100%"
-          minW="100%"
-        >
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>contracts</ModalBody>
-        </ModalContent>
-      </Modal>
-
-      <Divider />
-      <Button
-        onClick={onTagsModalOpen}
-        ps={1}
-        pe={2}
-        userSelect="none"
-        bg="none"
-        _hover={{ bg: "none" }}
-        _active={{ bg: "none" }}
-        fontSize="small"
-      >
-        <Text fontWeight={600}>Tags</Text>
-
-        <Spacer />
-        <BsChevronRight />
-      </Button>
-
-      <Modal isOpen={isTagsModalOpen} onClose={onTagsModalClose}>
-        <ModalOverlay />
-        <ModalContent
-          bg={useColorModeValue("gray.50", "gray.900")}
-          borderRadius={0}
-          my={0}
-          minH="100%"
-          minW="100%"
-        >
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>tags</ModalBody>
-        </ModalContent>
-      </Modal>
-
-      <Divider />
-    </Stack>
+        {links.forum.filter((link) => link != "").length > 0 &&
+          links.chat.filter((link) => link != "").length > 0 && (
+            <PopoverItem title={`Forums and Chats`} icon={RiWindowFill}>
+              <GetAllLinks links={links.forum} handleClick={pushRouter} />
+              <GetAllLinks links={links.chat} handleClick={pushRouter} />
+            </PopoverItem>
+          )}
+      </HStack>
+    </>
   );
 };
 

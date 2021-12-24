@@ -1,16 +1,10 @@
 import {
   useColorModeValue,
-  Text,
-  Icon,
+  Flex,
   Stack,
   Heading,
-  HStack,
-  Center,
-  Button,
-  IconButton,
-  Box,
+  Text,
   Spinner,
-  Spacer,
 } from "@chakra-ui/react";
 
 import { useState, useContext, useEffect } from "react";
@@ -26,9 +20,6 @@ import coinService from "../fetchers/coin";
 
 import { getRoundedNum } from "../utils/getRoundedNumber";
 import { getColouredNum } from "../utils/getColoredNumber";
-
-import { GoSettings } from "react-icons/go";
-import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 
 export const getStaticProps = async () => {
   const globalMarketData = await coinService.getMarketData();
@@ -47,73 +38,63 @@ export const getStaticProps = async () => {
   };
 };
 
-const globalMarketDataFetcher = async (url) => {
-  const res = await (await fetch(url)).json().then((res) => res.data);
-  return {
-    volume: res.total_volume,
-    market_cap: res.total_market_cap,
-    market_cap_change: res.market_cap_change_percentage_24h_usd,
-    active_cryptos: res.active_cryptocurrencies,
-    dominance: res.market_cap_percentage,
-  };
-};
-
-const trendingCoinsFetcher = async (url) => {
-  const res = await (await fetch(url)).json();
-  return res.coins.map((coin) => coin.item);
-};
-
-const tableDataFetcher = async (url) => {
-  const res = await (await fetch(url)).json();
-  const data = await Promise.all(
-    res.map(
-      async (coin) =>
-        await (
-          await fetch(
-            `https://api.coingecko.com/api/v3/coins/${coin.id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
-          )
-        ).json()
-    )
-  );
-  return data.map((coin) => {
-    return {
-      id: coin.id,
-      name: coin.name,
-      symbol: coin.symbol,
-      image: coin.image.large,
-      market_cap_rank: coin.market_cap_rank,
-      circulating_supply: coin.market_data.circulating_supply,
-      market_cap: coin.market_data.market_cap,
-      total_volume: coin.market_data.total_volume,
-      current_price: coin.market_data.current_price,
-      change24h: coin.market_data.price_change_percentage_24h_in_currency,
-      change7d: coin.market_data.price_change_percentage_7d_in_currency,
-      sparklines: coin.market_data.sparkline_7d.price,
-    };
-  });
-};
-
 export default function Home({ fallback }) {
-  const [pageIndex, setPageIndex] = useState(1);
   const { currency } = useContext(CurrencyContext);
-
-  console.log(currency);
+  const [pageIndex, setPageIndex] = useState(1);
 
   const { data: globalMarketData } = useSWR(
     "https://api.coingecko.com/api/v3/global",
-    globalMarketDataFetcher,
+    async (url) => {
+      const res = await (await fetch(url)).json().then((res) => res.data);
+      return {
+        volume: res.total_volume,
+        market_cap: res.total_market_cap,
+        market_cap_change: res.market_cap_change_percentage_24h_usd,
+        active_cryptos: res.active_cryptocurrencies,
+        dominance: res.market_cap_percentage,
+      };
+    },
     { fallback }
   );
-
   const { data: trendingCoins } = useSWR(
     "https://api.coingecko.com/api/v3/search/trending",
-    trendingCoinsFetcher,
+    async (url) => {
+      const res = await (await fetch(url)).json();
+      return res.coins.map((coin) => coin.item);
+    },
     { fallback }
   );
-
   const { data: tableData } = useSWR(
     `https://api.coingecko.com/api/v3/coins/markets?vs_currency=gbp&order=market_cap_desc&per_page=10&page=${pageIndex}&sparkline=true&price_change_percentage=24h%2C7d%2C`,
-    tableDataFetcher,
+    async (url) => {
+      const res = await (await fetch(url)).json();
+      const data = await Promise.all(
+        res.map(
+          async (coin) =>
+            await (
+              await fetch(
+                `https://api.coingecko.com/api/v3/coins/${coin.id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
+              )
+            ).json()
+        )
+      );
+      return data.map((coin) => {
+        return {
+          id: coin.id,
+          name: coin.name,
+          symbol: coin.symbol,
+          image: coin.image.large,
+          market_cap_rank: coin.market_cap_rank,
+          circulating_supply: coin.market_data.circulating_supply,
+          market_cap: coin.market_data.market_cap,
+          total_volume: coin.market_data.total_volume,
+          current_price: coin.market_data.current_price,
+          change24h: coin.market_data.price_change_percentage_24h_in_currency,
+          change7d: coin.market_data.price_change_percentage_7d_in_currency,
+          sparklines: coin.market_data.sparkline_7d.price,
+        };
+      });
+    },
     { fallback }
   );
 
@@ -122,116 +103,66 @@ export default function Home({ fallback }) {
   }, []);
 
   return (
-    <>
-      {/* Intro text and trending coins displayed on carousel */}
+    <Flex as="main" flexDir="column">
       <Stack
-        as="section"
-        spacing={[4, null, null, null, 24]}
+        py={[0, null, 4]}
+        mb={4}
+        spacing={[4, null, 6, null, 24]}
         direction={["column", null, null, null, "row"]}
       >
-        <Stack minW={[null, null, "max-content"]}>
-          <Heading fontWeight={600} fontSize={["md", "xl", "2xl"]}>
+        <Stack as="article" minW={[null, null, "max-content"]} justify="center">
+          <Heading fontWeight={[600, null, 600]} fontSize={["xl", null, "2xl"]}>
             Todays Cryptocurrency prices
           </Heading>
 
           <Text
             color={useColorModeValue("gray.600", "gray.300")}
-            fontSize={["sm", null, "14.5px"]}
+            fontSize={["small", null, "sm"]}
           >
-            The global crypto market cap is{" "}
+            {`The global crypto market cap is `}
             {currency.type !== "CRYPTO" ? (
               <Text as="span" fontWeight={600}>
                 {`${currency.symbol}${getRoundedNum(
                   globalMarketData.market_cap[currency.shorthand.toLowerCase()]
-                ).toString()},`}
+                ).toString()}, `}
               </Text>
             ) : (
               <Text as="span" fontWeight={600}>
                 {`${getRoundedNum(
                   globalMarketData.market_cap[currency.shorthand.toLowerCase()]
-                ).toString()} ${currency.symbol},`}
+                ).toString()} ${currency.symbol}, `}
               </Text>
-            )}{" "}
-            a {getColouredNum(globalMarketData.market_cap_change)}{" "}
+            )}
+            a {getColouredNum(globalMarketData.market_cap_change)}
             {globalMarketData.market_cap_change < 0
               ? " decrease over the last day. "
               : " increase over the last day. "}
           </Text>
         </Stack>
 
-        <Spacer />
-
         <Carousel data={trendingCoins} />
       </Stack>
 
-      {/* Table Header/Button Navigation  */}
       {!tableData ? (
-        <Center>
-          <Spinner my="32" color="blue.500" />
-        </Center>
+        <Flex
+          zIndex={-1}
+          pos="absolute"
+          bottom="0"
+          left="0"
+          w="100%"
+          h="100%"
+          align="center"
+          justify="center"
+        >
+          <Spinner color="blue.500" />
+        </Flex>
       ) : (
-        <>
-          <HStack>
-            <Button size="sm" fontSize="xs">
-              <HStack>
-                <Icon h="14px" w="14px" color="gray.500" as={GoSettings} />
-                <Text>Categories</Text>
-              </HStack>
-            </Button>
-          </HStack>
-
-          <CoinTable data={tableData} />
-
-          {/* Pagination */}
-          <HStack py={2} px={8} justify="center">
-            <IconButton
-              disabled={pageIndex === 1 ? true : false}
-              bg="none"
-              _hover={{ bg: "none" }}
-              size="xs"
-              onClick={() => {
-                setPageIndex(pageIndex - 1);
-                window.scroll({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }}
-              icon={<BsChevronLeft />}
-            />
-            <Button size="sm">1</Button>
-
-            <Button size="sm" bg="none">
-              2
-            </Button>
-            <Button size="sm" bg="none">
-              3
-            </Button>
-            <Button size="sm" bg="none">
-              4
-            </Button>
-            <Button size="sm" bg="none">
-              ...
-            </Button>
-            <Button size="sm" bg="none">
-              999
-            </Button>
-
-            <IconButton
-              bg="none"
-              _hover={{ bg: "none" }}
-              size="xs"
-              onClick={() => {
-                setPageIndex(pageIndex + 1);
-                window.scroll({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }}
-              icon={<BsChevronRight />}
-            />
-          </HStack>
-        </>
+        <CoinTable
+          data={tableData}
+          pageIndex={pageIndex}
+          setPageIndex={setPageIndex}
+        />
       )}
-    </>
+    </Flex>
   );
 }

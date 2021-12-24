@@ -19,7 +19,7 @@ import {
 const MotionCenter = motion(Center);
 
 const Carousel = ({ data }) => {
-  const [isLargerThan428] = useMediaQuery("(min-width: 428px)");
+  const [isLargerThan429] = useMediaQuery("(min-width: 429px)");
   const [isLargerThan810] = useMediaQuery("(min-width: 810px)");
   const [isLargerThan1100] = useMediaQuery("(min-width: 1100px)");
   const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
@@ -31,8 +31,8 @@ const Carousel = ({ data }) => {
 
   const handleScroll = (e) => {
     const scrollPosition = e.target.scrollLeft;
-
     console.log(scrollPosition);
+
     if (scrollPosition === 0) {
       return setIsArrowDisplayed({
         ...isArrowDisplayed,
@@ -41,7 +41,7 @@ const Carousel = ({ data }) => {
       });
     }
 
-    if (isLargerThan428 && scrollPosition >= 1200) {
+    if (isLargerThan429 && scrollPosition >= 1200) {
       return setIsArrowDisplayed({
         ...isArrowDisplayed,
         left: true,
@@ -75,7 +75,7 @@ const Carousel = ({ data }) => {
   };
 
   return (
-    <Flex overflow="hidden" pos="relative">
+    <Flex as="section" overflow="hidden" pos="relative">
       <Flex
         id="carousel"
         overflowX="scroll"
@@ -105,6 +105,7 @@ const Carousel = ({ data }) => {
                   right: true,
                 });
               }}
+              zIndex="99"
               cursor="pointer"
               pos="absolute"
               left="0"
@@ -146,6 +147,7 @@ const Carousel = ({ data }) => {
                   right: false,
                 });
               }}
+              zIndex="99"
               cursor="pointer"
               pos="absolute"
               right="0"

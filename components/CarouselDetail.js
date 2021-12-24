@@ -2,7 +2,9 @@ import {
   useColorModeValue,
   Text,
   Image,
+  Spacer,
   Stack,
+  Flex,
   HStack,
 } from "@chakra-ui/react";
 
@@ -16,8 +18,11 @@ const CarouselDetail = ({ coinData }) => {
       as={`cryptocurrencies/${coinData.id}`}
     >
       <HStack
+        pos="relative"
+        as="a"
         minW="275px"
-        p={6}
+        py={6}
+        px={4}
         me={2}
         userSelect="none"
         bg={useColorModeValue("white", "gray.900")}

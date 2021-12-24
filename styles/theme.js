@@ -2,21 +2,8 @@ import { baseStyle, extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
 const config = {
-  initialColorMode: "light",
+  initialColorMode: "dark",
   useSystemColorMode: true,
-};
-
-const global = {
-  styles: {
-    global: {
-      "html, body": {
-        fontSize: "sm",
-        scrollbarWidth: "none",
-
-        // bg: props.colorMode === "dark" ? darkMode : lightMode,
-      },
-    },
-  },
 };
 
 const Button = {
@@ -39,15 +26,6 @@ const Table = {
   },
 };
 
-// const theme = extendTheme({
-//   config,
-//   global,
-//   components: {
-//     Button,
-//     Table,
-//   },
-// });
-
 const theme = extendTheme({
   styles: {
     global: (props) => ({
@@ -55,6 +33,7 @@ const theme = extendTheme({
         fontSize: "sm",
         scrollbarWidth: "none",
         bg: mode("gray.50", "gray.900")(props),
+        minH: "100vh",
       },
     }),
   },
@@ -65,27 +44,3 @@ const theme = extendTheme({
   },
 });
 export default theme;
-
-// const global = {
-//   styles: {
-//     global: (props) => ({
-//       body: {
-//         body: {
-//           fontFamily: "body",
-//           fontSize: "sm",
-//           scrollbarWidth: "none",
-//           color: mode("gray.800", "whiteAlpha.900")(props),
-//           bg: mode("gray.50", "gray.800")(props),
-//           lineHeight: "base",
-//         },
-//         "*::placeholder": {
-//           color: mode("gray.400", "whiteAlpha.400")(props),
-//         },
-//         "*, *::before, &::after": {
-//           borderColor: mode("gray.200", "whiteAlpha.300")(props),
-//           wordWrap: "break-word",
-//         },
-//       },
-//     }),
-//   },
-// };

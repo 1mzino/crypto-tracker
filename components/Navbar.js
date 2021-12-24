@@ -7,38 +7,34 @@ import {
   Flex,
   HStack,
   IconButton,
-  Button,
   Center,
   Icon,
   Stack,
-  Drawer,
-  DrawerBody,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerHeader,
-  DrawerCloseButton,
   Spacer,
   Divider,
   Text,
   Input,
   InputGroup,
   InputLeftElement,
-  Spinner,
+  Drawer,
+  DrawerBody,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 
 import { useState, useEffect, useRef, useContext } from "react";
-import { useRouter } from "next/router";
+
 import Link from "next/link";
 
-import useGlobalData from "../hooks/useGlobalData";
 import { CurrencyContext } from "../contexts/CurrencyContext";
-
 import CurrencySelector from "./CurrencySelector";
 
-import { FiSearch } from "react-icons/fi";
+import { BiSearch } from "react-icons/bi";
 import { FaHome, FaMoon, FaSun } from "react-icons/fa";
-import { AiFillCaretDown } from "react-icons/ai";
-import { GiRayGun, GiTwoCoins } from "react-icons/gi";
+
+import { GiTwoCoins } from "react-icons/gi";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { BsChevronRight } from "react-icons/bs";
 
@@ -63,205 +59,77 @@ const navItems = [
 const Navbar = () => {
   const [isLargerThan991] = useMediaQuery("(min-width: 991px)");
   const { currency, dispatch } = useContext(CurrencyContext);
-  const { marketData, isLoading } = useGlobalData();
 
-  const { toggleColorMode } = useColorMode();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const { pathname } = useRouter();
   const btnRef = useRef();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { toggleColorMode } = useColorMode();
 
-  const [indicatorStatus, setIndicatorStatus] = useState({
-    left: 0,
-    width: 0,
-  });
+  // const [indicatorStatus, setIndicatorStatus] = useState({
+  //   left: 0,
+  //   width: 0,
+  // });
 
-  const getMarketChange = (data) => {
-    const marketChange = data.market_cap_change.toFixed(2);
+  // const getIndicatorPath = () => {
+  //   let pathId = navItems
+  //     .filter((item) => pathname === item.url)
+  //     .map((item) => item.id);
 
-    if (marketChange > 0) {
-      return `Market is up ${marketChange}%`;
-    } else return `Market is down ${Math.abs(marketChange)}%`;
-  };
+  //   // When on dynamic route, pathname now contains /[pathId/[dynamic route]... therefore must split router pathname
+  //   if (pathId.length < 1) {
+  //     // console.log(
+  //     //   "pathId is null... \nsplitting URL and recalculating pathId..."
+  //     // );
+  //     const paths = pathname.split("/");
+  //     pathId = navItems
+  //       .filter((item) => paths[1] === item.id.toLowerCase())
+  //       .map((item) => item.id);
 
-  const getIndicatorPath = () => {
-    let pathId = navItems
-      .filter((item) => pathname === item.url)
-      .map((item) => item.id);
+  //     // console.log(`new pathId: ${pathId}`);
+  //   }
 
-    // When on dynamic route, pathname now contains /[pathId/[dynamic route]... therefore must split router pathname
-    if (pathId.length < 1) {
-      // console.log(
-      //   "pathId is null... \nsplitting URL and recalculating pathId..."
-      // );
-      const paths = pathname.split("/");
-      pathId = navItems
-        .filter((item) => paths[1] === item.id.toLowerCase())
-        .map((item) => item.id);
+  //   const container = document.getElementById(pathId);
+  //   if (container !== null) {
+  //     setIndicatorStatus({
+  //       ...indicatorStatus,
+  //       left: `${container.offsetLeft}px`,
+  //       width: `${container.offsetWidth}px`,
+  //     });
+  //   }
+  // };
 
-      // console.log(`new pathId: ${pathId}`);
-    }
+  // const handleHover = (e) => {
+  //   const container = document.getElementById(e.currentTarget.id);
+  //   setIndicatorStatus({
+  //     ...indicatorStatus,
+  //     left: `${container.offsetLeft}px`,
+  //     width: `${container.offsetWidth}px`,
+  //   });
+  //   // console.log("changed indicator", e.currentTarget.id);
+  // };
 
-    const container = document.getElementById(pathId);
-    if (container !== null) {
-      setIndicatorStatus({
-        ...indicatorStatus,
-        left: `${container.offsetLeft}px`,
-        width: `${container.offsetWidth}px`,
-      });
-    }
-  };
-
-  const handleHover = (e) => {
-    const container = document.getElementById(e.currentTarget.id);
-    setIndicatorStatus({
-      ...indicatorStatus,
-      left: `${container.offsetLeft}px`,
-      width: `${container.offsetWidth}px`,
-    });
-    // console.log("changed indicator", e.currentTarget.id);
-  };
-
-  useEffect(() => {
-    getIndicatorPath();
-  }, [pathname]);
+  // useEffect(() => {
+  //   getIndicatorPath();
+  // }, [pathname]);
 
   return (
     <>
-      <Box
-        as="header"
-        display={["none", null, null, "block"]}
-        bg={useColorModeValue("white", "gray.900")}
-        userSelect="none"
-      >
-        <HStack
-          as="section"
-          h="32px"
-          borderBottom="1px solid"
-          borderColor="inherit"
-          px={8}
-          py={2}
-          fontWeight={500}
-          spacing={4}
-          fontSize="10.5px"
-        >
-          {marketData ? <Text>{getMarketChange(marketData)}</Text> : null}
-          <Divider orientation="vertical" />
-          <Text>Cryptos: </Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : (
-            <Text as="span" color="blue.500">
-              {marketData.active_cryptos}
-            </Text>
-          )}
-
-          <Text>Market Cap: </Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : currency.type !== "CRYPTO" ? (
-            <Text as="span" color="blue.500">
-              {`${currency.symbol}${marketData.market_cap[
-                currency.shorthand.toLowerCase()
-              ].toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}`}
-            </Text>
-          ) : (
-            <Text as="span" color="blue.500">
-              {`${marketData.market_cap[
-                currency.shorthand.toLowerCase()
-              ].toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })} ${currency.symbol}`}
-            </Text>
-          )}
-
-          <Text>24h Volume: </Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : currency.type !== "CRYPTO" ? (
-            <Text as="span" color="blue.500">
-              {`${currency.symbol}${marketData.volume[
-                currency.shorthand.toLowerCase()
-              ].toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}`}
-            </Text>
-          ) : (
-            <Text as="span" color="blue.500">
-              {`${marketData.volume[
-                currency.shorthand.toLowerCase()
-              ].toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })} ${currency.symbol}`}
-            </Text>
-          )}
-
-          <Text fontWeight={500}>{`Dominance: `}</Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : (
-            <Text as="span" fontWeight={600} color="blue.500">
-              {`${Object.keys(
-                marketData.dominance
-              )[0]?.toUpperCase()}: ${marketData.dominance[
-                Object.keys(marketData.dominance)[0]
-              ]?.toFixed(1)}%`}{" "}
-              {`${Object.keys(
-                marketData.dominance
-              )[1]?.toUpperCase()}: ${marketData.dominance[
-                Object.keys(marketData.dominance)[1]
-              ]?.toFixed(1)}%`}
-            </Text>
-          )}
-        </HStack>
-
+      {/* DESKTOP */}
+      <Box display={["none", null, null, "block"]}>
         <HStack
           as="nav"
-          borderBottom="1px solid"
-          borderColor="inherit"
-          pos="sticky"
-          top="0"
+          w="100%"
+          userSelect="none"
           align="center"
-          px={8}
           py={4}
           spacing={16}
         >
           {navItems.map((item) => (
             <Link key={item.id} href={`${item.url}`}>
               <Flex
+                as="a"
                 id={item.id}
-                onMouseOver={handleHover}
-                onMouseLeave={getIndicatorPath}
+                // onMouseOver={handleHover}
+                // onMouseLeave={getIndicatorPath}
                 userSelect="none"
                 cursor="pointer"
                 h={["0px", "0px", "40px"]}
@@ -280,7 +148,7 @@ const Navbar = () => {
           <Spacer />
           <HStack spacing={4}>
             <InputGroup cursor="pointer" w="200px" variant="filled">
-              <InputLeftElement color="gray.500" children={<FiSearch />} />
+              <InputLeftElement color="gray.500" children={<BiSearch />} />
               <Input
                 cursor="pointer"
                 fontSize="xs"
@@ -305,202 +173,80 @@ const Navbar = () => {
             </Box>
           </HStack>
         </HStack>
-        <Box
-          transition="ease-in-out 0.5s"
-          pos="absolute"
-          left={indicatorStatus.left}
-          top="6.4rem"
-          h="0.15rem"
-          w={indicatorStatus.width}
-          // bg={useColorModeValue("#3182CE", "#63B3ED")}
-          bg="blue.500"
-          borderRadius="md"
-        />
+
+        <Divider pos="absolute" left="0" />
       </Box>
 
-      <Box as="header" display={["block", null, null, "none"]}>
-        <HStack
-          as="nav"
-          position="sticky"
-          top="0"
-          zIndex={999}
-          bg={useColorModeValue("white", "gray.900")}
-          borderBottom="1px solid"
-          borderColor="inherit"
-          justify="flex-end"
-          px={4}
-          py={2}
-        >
-          <IconButton size="md" px={0} bg="none" icon={<FiSearch />} />
-          {/* <Icon h="20px" w="20px" as={FiSearch} /> */}
-
-          <Button ref={btnRef} onClick={onOpen} px={0} bg="none">
-            <Center>
-              <Icon h="20px" w="20px" as={HiOutlineMenuAlt3} />
-            </Center>
-          </Button>
+      <Box display={["block", null, null, "none"]}>
+        <HStack as="nav" py={2} justify="flex-end">
+          <IconButton bg="none" icon={<BiSearch />} />
+          <IconButton
+            ref={btnRef}
+            onClick={onOpen}
+            bg="none"
+            icon={<HiOutlineMenuAlt3 />}
+          />
         </HStack>
 
-        <HStack
-          sx={{
-            "&::-webkit-scrollbar": {
-              display: "none",
-              width: 0,
-            },
-            scrollbarWidth: "none",
-          }}
-          bg={useColorModeValue("white", "gray.900")}
-          borderBottom="1px solid"
-          borderColor="inherit"
-          overflowX="auto"
-          overflowY="hidden"
-          whiteSpace="nowrap"
-          h="32px"
-          px={4}
-          py={2}
-          spacing={2}
-          fontSize="10.5px"
+        <Divider pos="absolute" left="0" />
+
+        <Drawer
+          display={["block", null, null, "none"]}
+          isOpen={isOpen}
+          onClose={onClose}
+          finalFocusRef={btnRef}
+          placement="right"
         >
-          <Text fontWeight={500}>{`Cryptos: `}</Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : (
-            <Text fontWeight={600} as="span" color="blue.500">
-              {marketData.active_cryptos}
-            </Text>
-          )}
+          <DrawerOverlay bg="blackAlpha.800" />
+          <DrawerContent>
+            <DrawerHeader
+              bg={useColorModeValue("white", "gray.900")}
+              px={4}
+              py={4}
+            >
+              <HStack spacing={4}>
+                <IconButton
+                  bg="none"
+                  aria-label="Dark Mode Switch"
+                  onClick={toggleColorMode}
+                >
+                  {useColorModeValue(<FaMoon />, <FaSun />)}
+                </IconButton>
+                <CurrencySelector
+                  onClose={onClose}
+                  currency={currency}
+                  dispatch={dispatch}
+                />
+                <Spacer />
+                <DrawerCloseButton pos="inherit" w="40px" h="40px" />
+              </HStack>
+            </DrawerHeader>
 
-          <Text fontWeight={500}>{`Market Cap: `}</Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : (
-            <Text fontWeight={600} as="span" color="blue.500">
-              {currency.symbol}
-              {marketData.market_cap[
-                currency.shorthand.toLowerCase()
-              ].toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}
-            </Text>
-          )}
-
-          <Text as="span" fontWeight={500}>{`24h Volume: `}</Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : (
-            <Text fontWeight={600} as="span" color="blue.500">
-              {currency.symbol}
-              {marketData.volume[
-                currency.shorthand.toLowerCase()
-              ].toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}
-            </Text>
-          )}
-
-          <Text fontWeight={500}>{`Dominance: `}</Text>
-          {isLoading ? (
-            <Spinner
-              mx={1.5}
-              h="10px"
-              w="10px"
-              speed="0.75s"
-              thickness="1.5px"
-              color="blue.500"
-            />
-          ) : (
-            <Text as="span" fontWeight={600} color="blue.500">
-              {`${Object.keys(
-                marketData.dominance
-              )[0]?.toUpperCase()}: ${marketData.dominance[
-                Object.keys(marketData.dominance)[0]
-              ]?.toFixed(1)}%`}{" "}
-              {`${Object.keys(
-                marketData.dominance
-              )[1]?.toUpperCase()}: ${marketData.dominance[
-                Object.keys(marketData.dominance)[1]
-              ]?.toFixed(1)}%`}
-            </Text>
-          )}
-        </HStack>
+            <DrawerBody
+              bg={useColorModeValue("gray.50", "gray.800")}
+              bgGradient={useColorModeValue(
+                "",
+                "linear(to-b, gray.800, gray.800,  gray.900)"
+              )}
+            >
+              {navItems.map((item) => (
+                <Link key={item.id} href={item.url}>
+                  <Stack spacing={0}>
+                    <HStack onClick={onClose} cursor="pointer" px={1} py={4}>
+                      <Text fontWeight={500} fontSize="sm">
+                        {item.id}
+                      </Text>
+                      <Spacer />
+                      <Icon h="12px" w="12px" as={BsChevronRight} />
+                    </HStack>
+                    <Divider pl={6} />
+                  </Stack>
+                </Link>
+              ))}
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </Box>
-
-      <Drawer
-        isOpen={isOpen}
-        onClose={onClose}
-        finalFocusRef={btnRef}
-        placement="right"
-      >
-        <DrawerOverlay bg="blackAlpha.800" />
-        <DrawerContent>
-          <DrawerHeader
-            bg={useColorModeValue("white", "gray.900")}
-            px={4}
-            py={4}
-          >
-            <HStack spacing={4}>
-              <IconButton
-                bg="none"
-                aria-label="Dark Mode Switch"
-                onClick={toggleColorMode}
-              >
-                {useColorModeValue(<FaMoon />, <FaSun />)}
-              </IconButton>
-              <CurrencySelector
-                onClose={onClose}
-                currency={currency}
-                dispatch={dispatch}
-              />
-              <Spacer />
-              <DrawerCloseButton pos="inherit" w="40px" h="40px" />
-            </HStack>
-          </DrawerHeader>
-
-          <DrawerBody
-            bg={useColorModeValue("gray.50", "gray.800")}
-            bgGradient={useColorModeValue(
-              "",
-              "linear(to-b, gray.800, gray.800,  gray.900)"
-            )}
-          >
-            {navItems.map((item) => (
-              <Link key={item.id} href={item.url}>
-                <Stack spacing={0}>
-                  <HStack onClick={onClose} cursor="pointer" px={1} py={4}>
-                    <Text fontWeight={500} fontSize="sm">
-                      {item.id}
-                    </Text>
-                    <Spacer />
-                    <Icon h="12px" w="12px" as={BsChevronRight} />
-                  </HStack>
-                  <Divider pl={6} />
-                </Stack>
-              </Link>
-            ))}
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
     </>
   );
 };

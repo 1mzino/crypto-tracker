@@ -1,39 +1,44 @@
 import {
-  Menu,
-  MenuButton,
+  useColorModeValue,
   HStack,
   Text,
   Icon,
-  MenuList,
-  MenuItem,
-  Stack,
-  Slider as ChakraSlider,
-  SliderTrack,
   Button,
-  SliderFilledTrack,
-  useColorModeValue,
   Flex,
   Spacer,
-  Box,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Slider as ChakraSlider,
+  SliderTrack,
+  SliderFilledTrack,
 } from "@chakra-ui/react";
-import { BsChevronDown, BsChevronUp } from "react-icons/bs";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { BsChevronDown } from "react-icons/bs";
 
-const Slider = ({ coin, currency }) => {
+import { useContext, useState } from "react";
+import { CurrencyContext } from "../contexts/CurrencyContext";
+import { getCurrencyFormat } from "../utils/getCurrencyFormat";
+
+const Slider = ({ coin }) => {
+  const { currency } = useContext(CurrencyContext);
   const [menuCaption, setMenuCaption] = useState("24h");
   const handleSelect = (e) => {
     setMenuCaption(e.target.value);
   };
-  const MotionBox = motion(Box);
+
   return (
-    // <MotionBox animate w={[null, null, null, "45vw"]} px={1}>
-    <Stack spacing={4}>
-      <HStack>
-        <Text fontSize="xs">
-          {`LOW`}
-          <Text as="span" fontWeight={600}>
-            {` ${currency.symbol}${
+    <Flex
+      my={1}
+      flexDir="column"
+      align={[null, null, "flex-end", null, "flex-start"]}
+    >
+      <HStack minW="100%" justify="space-between">
+        <Text fontWeight={500} fontSize="xs">
+          {`LOW `}
+          <Text fontWeight={600} as="span">
+            {getCurrencyFormat(
+              currency,
               menuCaption === "24h"
                 ? coin.market_data.atl_24h[
                     currency.shorthand.toLowerCase()
@@ -47,14 +52,15 @@ const Slider = ({ coin, currency }) => {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 6,
                   })
-            }`}
+            )}
           </Text>
         </Text>
-        <Spacer />
-        <Text fontSize="xs">
-          {`HIGH`}
-          <Text as="span" fontWeight={600}>
-            {` ${currency.symbol}${
+
+        <Text fontWeight={500} fontSize="xs">
+          {`HIGH `}
+          <Text fontWeight={600} as="span">
+            {getCurrencyFormat(
+              currency,
               menuCaption === "24h"
                 ? coin.market_data.ath_24h[
                     currency.shorthand.toLowerCase()
@@ -68,23 +74,15 @@ const Slider = ({ coin, currency }) => {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 6,
                   })
-            }`}
+            )}
           </Text>
         </Text>
 
-        <Spacer />
-
         <Menu autoSelect={false}>
-          <MenuButton
-            px={2}
-            size="xs"
-            fontSize="xs"
-            as={Button}
-            // rightIcon={<BsChevronDown  />}
-          >
+          <MenuButton size="xs" fontSize="xs" as={Button}>
             <HStack pr={(2, null, 1)}>
               <Text fontSize="xs">{menuCaption}</Text>
-              <Icon h="6px" w="6px" as={BsChevronDown} />
+              <Icon h={2} w={2} as={BsChevronDown} />
             </HStack>
           </MenuButton>
           <MenuList
@@ -101,17 +99,15 @@ const Slider = ({ coin, currency }) => {
           </MenuList>
         </Menu>
       </HStack>
+
       <ChakraSlider
-        my={2}
+        mt={6}
         size="lg"
         cursor="default"
-        defaultValue={coin.market_data.current_price.gbp.toLocaleString(
-          undefined,
-          {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 6,
-          }
-        )}
+        value={coin.market_data.current_price[currency.shorthand.toLowerCase()]}
+        // defaultValue={
+        //   coin.market_data.current_price[currency.shorthand.toLowerCase()]
+        // }
         min={
           menuCaption === "24h"
             ? coin.market_data.atl_24h[currency.shorthand.toLowerCase()]
@@ -122,14 +118,13 @@ const Slider = ({ coin, currency }) => {
             ? coin.market_data.ath_24h[currency.shorthand.toLowerCase()]
             : coin.market_data.all_time_high[currency.shorthand.toLowerCase()]
         }
-        isReadOnly={true}
+        // isReadOnly={true}
       >
         <SliderTrack borderRadius="lg" h="5px">
           <SliderFilledTrack bg="blue.500" transition="1.25s ease-in-out" />
         </SliderTrack>
       </ChakraSlider>
-    </Stack>
-    // </MotionBox>
+    </Flex>
   );
 };
 

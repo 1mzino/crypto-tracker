@@ -19,6 +19,16 @@ import {
   Input,
   InputLeftElement,
   Divider,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuIcon,
+  MenuCommand,
+  MenuDivider,
   useMediaQuery,
 } from "@chakra-ui/react";
 import { useContext } from "react";
@@ -90,116 +100,139 @@ const CurrencySelector = ({ onClose }) => {
   } = useDisclosure();
 
   return (
-    <>
-      <HStack cursor="pointer" onClick={onOpenCurrencyModal} spacing={2}>
-        <Text fontWeight={600} fontSize="md">
-          {currency.shorthand.toUpperCase()}
-        </Text>
-        <Icon h="12px" w="12px" as={AiFillCaretDown} />
-      </HStack>
-
-      <Modal
-        overflow="hidden"
-        size={isDesktop ? "3xl" : "full"}
-        isOpen={isOpenCurrencyModal}
-        onClose={onCloseCurrencyModal}
-        borderRadius={isDesktop ? "xl" : "none"}
+    <Menu>
+      <MenuButton bg="transparent" as={Button} rightIcon={<AiFillCaretDown />}>
+        {currency.shorthand}
+      </MenuButton>
+      <MenuList
+        minW="120px"
+        bg={useColorModeValue("white", "gray.800")}
+        fontSize="sm"
       >
-        <ModalOverlay />
-        <ModalContent
-          borderRadius={isDesktop ? "xl" : "none"}
-          bg={useColorModeValue("white", "gray.800")}
-          my={isDesktop ? "5rem" : 0}
+        <MenuItem
+          fontWeight={500}
+          onClick={() => {
+            dispatch({ type: "GBP" });
+            onClose();
+          }}
         >
-          <ModalHeader
-            borderTopRadius={isDesktop ? "xl" : "none"}
-            bg={useColorModeValue("white", "gray.900")}
-            py={4}
-          >
-            Select Currency
-          </ModalHeader>
-          <ModalCloseButton m={2} />
-          <ModalBody>
-            <Stack pb={4} spacing={4}>
-              <Stack fontWeight={500}>
-                <Text fontSize="xs" color="gray.400">
-                  Popular Currencies
-                </Text>
-                <SimpleGrid minChildWidth="160px" spacing={4}>
-                  {supportedCurrencies.map((currency, i) =>
-                    currency.popular ? (
-                      <CurrencyIcon
-                        key={i}
-                        currency={currency}
-                        dispatch={dispatch}
-                        onClose={onClose}
-                        onCloseCurrencyModal={onCloseCurrencyModal}
-                      />
-                    ) : null
-                  )}
-                </SimpleGrid>
+          <Text>GBP</Text>
+        </MenuItem>
+        <MenuItem
+          fontWeight={500}
+          onClick={() => {
+            dispatch({ type: "USD" });
+            onClose();
+          }}
+        >
+          USD
+        </MenuItem>
 
-                <Text fontSize="xs" color="gray.400">
-                  Bitcoin Units
-                </Text>
-                <SimpleGrid minChildWidth="160px" spacing={4}>
-                  {supportedCurrencies.map((currency, i) =>
-                    currency.type === "BITCOIN" ? (
-                      <CurrencyIcon
-                        key={i}
-                        currency={currency}
-                        dispatch={dispatch}
-                        onCloseCurrencyModal={onCloseCurrencyModal}
-                        onClose={onClose}
-                      />
-                    ) : null
-                  )}
-                </SimpleGrid>
-
-                <Text fontSize="xs" color="gray.400">
-                  FIAT Currencies
-                </Text>
-                <SimpleGrid minChildWidth="160px" spacing={4}>
-                  {supportedCurrencies.map((currency, i) =>
-                    currency.type === "FIAT" ? (
-                      <CurrencyIcon
-                        key={i}
-                        currency={currency}
-                        dispatch={dispatch}
-                        onCloseCurrencyModal={onCloseCurrencyModal}
-                        onClose={onClose}
-                      />
-                    ) : null
-                  )}
-                </SimpleGrid>
-              </Stack>
-            </Stack>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
-    // <Menu pos="relative" zIndex={999999} autoSelect={false}>
-    //   <MenuButton bg="none">
-    //     <HStack spacing={2}>
-    //       <Text fontWeight={600} fontSize="md">
-    //         {currency ? currency.shorthand.toUpperCase() : "error"}
-    //       </Text>
-    //       <Icon h="12px" w="12px" as={AiFillCaretDown} />
-    //     </HStack>
-    //   </MenuButton>
-    //   <MenuList
-    //     bg={useColorModeValue("white", "gray.900")}
-    //     fontSize="lg"
-    //     minW="10em"
-    //   >
-    //     <MenuItem onClick={() => dispatch({ type: "GBP" })}>
-    //       Pound Sterling
-    //     </MenuItem>
-    //     <MenuItem onClick={() => dispatch({ type: "USD" })}>US Dollar</MenuItem>
-    //     <MenuItem onClick={() => dispatch({ type: "EUR" })}>Euro</MenuItem>
-    //   </MenuList>
-    // </Menu>
+        <MenuItem
+          fontWeight={500}
+          onClick={() => {
+            dispatch({ type: "BTC" });
+            onClose();
+          }}
+        >
+          BTC
+        </MenuItem>
+      </MenuList>
+    </Menu>
   );
+
+  // return (
+  //   <>
+  // <HStack cursor="pointer" onClick={onOpenCurrencyModal} spacing={2}>
+  //   <Text fontWeight={600} fontSize="md">
+  //     {currency.shorthand.toUpperCase()}
+  //   </Text>
+  //   <Icon h="12px" w="12px" as={AiFillCaretDown} />
+  // </HStack>
+
+  //     <Modal
+  //       overflow="hidden"
+  //       size={isDesktop ? "3xl" : "full"}
+  //       isOpen={isOpenCurrencyModal}
+  //       onClose={onCloseCurrencyModal}
+  //       borderRadius={isDesktop ? "xl" : "none"}
+  //     >
+  //       <ModalOverlay />
+  //       <ModalContent
+  //         pos="fixed"
+  //         borderRadius={isDesktop ? "xl" : "none"}
+  //         bg={useColorModeValue("white", "gray.800")}
+  //         my={isDesktop ? "5rem" : 0}
+  //       >
+  //         <ModalHeader
+  //           borderTopRadius={isDesktop ? "xl" : "none"}
+  //           bg={useColorModeValue("white", "gray.900")}
+  //           py={4}
+  //         >
+  //           Select Currency
+  //         </ModalHeader>
+  //         <ModalCloseButton m={2} />
+  //         <ModalBody>
+  //           <Stack pb={4} spacing={4}>
+  //             <Stack fontWeight={500}>
+  //               <Text fontSize="xs" color="gray.400">
+  //                 Popular Currencies
+  //               </Text>
+  //               <SimpleGrid minChildWidth="160px" spacing={4}>
+  //                 {supportedCurrencies.map((data, i) =>
+  //                   data.popular ? (
+  //                     <CurrencyIcon
+  //                       key={i}
+  //                       currency={currency}
+  //                       dispatch={dispatch}
+  //                       onClose={onClose}
+  //                       onCloseCurrencyModal={onCloseCurrencyModal}
+  //                     />
+  //                   ) : null
+  //                 )}
+  //               </SimpleGrid>
+
+  //               <Text fontSize="xs" color="gray.400">
+  //                 Bitcoin Units
+  //               </Text>
+  //               <SimpleGrid minChildWidth="160px" spacing={4}>
+  //                 {supportedCurrencies.map((data, i) =>
+  //                   data.type === "BITCOIN" ? (
+  //                     <CurrencyIcon
+  //                       key={i}
+  //                       data={data}
+  //                       currency={currency}
+  //                       dispatch={dispatch}
+  //                       onCloseCurrencyModal={onCloseCurrencyModal}
+  //                       onClose={onClose}
+  //                     />
+  //                   ) : null
+  //                 )}
+  //               </SimpleGrid>
+
+  //               <Text fontSize="xs" color="gray.400">
+  //                 FIAT Currencies
+  //               </Text>
+  //               <SimpleGrid minChildWidth="160px" spacing={4}>
+  //                 {supportedCurrencies.map((data, i) =>
+  //                   data.type === "FIAT" ? (
+  //                     <CurrencyIcon
+  //                       key={i}
+  //                       currency={currency}
+  //                       dispatch={dispatch}
+  //                       onCloseCurrencyModal={onCloseCurrencyModal}
+  //                       onClose={onClose}
+  //                     />
+  //                   ) : null
+  //                 )}
+  //               </SimpleGrid>
+  //             </Stack>
+  //           </Stack>
+  //         </ModalBody>
+  //       </ModalContent>
+  //     </Modal>
+  //   </>
+  // );
 };
 
 export default CurrencySelector;

@@ -8,7 +8,6 @@ import { CurrencyProvider } from "../contexts/CurrencyContext";
 
 import "../styles/nprogress.css";
 import nProgress from "nprogress";
-import { SWRConfig } from "swr";
 
 export default function App({ Component, pageProps }) {
   nProgress.configure({ showSpinner: false });
@@ -26,15 +25,13 @@ export default function App({ Component, pageProps }) {
         />
       </Head>
 
-      <CurrencyProvider>
-        <ChakraProvider theme={theme}>
-          <SWRConfig>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </SWRConfig>
-        </ChakraProvider>
-      </CurrencyProvider>
+      <ChakraProvider theme={theme}>
+        <CurrencyProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CurrencyProvider>
+      </ChakraProvider>
     </>
   );
 }
