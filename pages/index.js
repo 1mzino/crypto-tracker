@@ -105,7 +105,8 @@ export default function Home({ fallback }) {
   return (
     <Flex as="main" flexDir="column">
       <Stack
-        py={[0, null, 4]}
+        // py={[1, null, 4]}
+        py={[2, null, 4]}
         mb={4}
         spacing={[4, null, 6, null, 24]}
         direction={["column", null, null, null, "row"]}

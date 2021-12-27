@@ -23,9 +23,10 @@ const HeaderTag = ({ title, content }) => {
 const Header = () => {
   const { currency } = useContext(CurrencyContext);
   const { marketData } = useGlobalData();
+  console.log("market data", marketData);
 
   return (
-    <Box order={[2, null, null, -1]}>
+    <Box order={[null, null, null, -1]}>
       <HStack
         as="header"
         spacing={4}

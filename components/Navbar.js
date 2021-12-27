@@ -25,8 +25,10 @@ import {
 } from "@chakra-ui/react";
 
 import { useState, useEffect, useRef, useContext } from "react";
+import router, { useRouter } from "next/router";
 
 import Link from "next/link";
+import { motion, LayoutGroup } from "framer-motion";
 
 import { CurrencyContext } from "../contexts/CurrencyContext";
 import CurrencySelector from "./CurrencySelector";
@@ -38,31 +40,94 @@ import { GiTwoCoins } from "react-icons/gi";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { BsChevronRight } from "react-icons/bs";
 
-const navItems = [
-  {
-    id: "Home",
-    icon: FaHome,
-    url: "/",
-  },
-  {
-    id: "Cryptocurrencies",
-    icon: GiTwoCoins,
-    url: "/cryptocurrencies",
-  },
-  {
-    id: "Exchanges",
-    icon: GiTwoCoins,
-    url: "/exchanges",
-  },
-];
+const MotionBox = motion(Box);
+const NavItem = ({ url, text, icon, selected, handleClick, handleLeave }) => {
+  return (
+    <Link href={url}>
+      <MotionBox
+        as="a"
+        pos="relative"
+        cursor="pointer"
+        onClick={handleClick}
+        onMouseEnter={handleClick}
+        onMouseLeave={handleLeave}
+        fontSize="sm"
+      >
+        <HStack>
+          <Text fontWeight={550} pr="0.75rem">
+            {text}
+          </Text>
 
+          <Icon as={icon} />
+        </HStack>
+
+        {selected && (
+          <MotionBox
+            layoutId="underline"
+            zIndex={10}
+            pos="absolute"
+            top="215%"
+            left="0"
+            width="100%"
+            height="3px"
+            borderRadius="lg"
+            bg="blue.400"
+          />
+        )}
+      </MotionBox>
+    </Link>
+  );
+};
 const Navbar = () => {
-  const [isLargerThan991] = useMediaQuery("(min-width: 991px)");
+  const navItems = [
+    {
+      id: 0,
+      name: "Home",
+      icon: FaHome,
+      url: "/",
+    },
+    {
+      id: 1,
+      name: "Cryptocurrencies",
+      icon: GiTwoCoins,
+      url: "/cryptocurrencies",
+    },
+    {
+      id: 2,
+      name: "Exchanges",
+      icon: GiTwoCoins,
+      url: "/exchanges",
+    },
+  ];
+
   const { currency, dispatch } = useContext(CurrencyContext);
+  const router = useRouter();
+  console.log(router);
 
   const btnRef = useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { toggleColorMode } = useColorMode();
+  const [selected, setSelected] = useState(0);
+  const getPath = () => {
+    let currentPath = navItems
+      .filter((item) => router.pathname === item.url)
+      .map((item) => item.id);
+
+    if (currentPath) {
+      setSelected(currentPath[0]);
+    }
+
+    if (currentPath.length < 1) {
+      let newPath = navItems
+        .filter(
+          (item) => router.pathname.split("/")[1] === item.name.toLowerCase()
+        )
+        .map((item) => item.id);
+      setSelected(newPath[0]);
+    }
+
+    console.log("current page", currentPath);
+  };
 
   // const [indicatorStatus, setIndicatorStatus] = useState({
   //   left: 0,
@@ -107,9 +172,9 @@ const Navbar = () => {
   //   // console.log("changed indicator", e.currentTarget.id);
   // };
 
-  // useEffect(() => {
-  //   getIndicatorPath();
-  // }, [pathname]);
+  useEffect(() => {
+    getPath();
+  }, [router.pathname]);
 
   return (
     <>
@@ -123,28 +188,20 @@ const Navbar = () => {
           py={4}
           spacing={16}
         >
-          {navItems.map((item) => (
-            <Link key={item.id} href={`${item.url}`}>
-              <Flex
-                as="a"
-                id={item.id}
-                // onMouseOver={handleHover}
-                // onMouseLeave={getIndicatorPath}
-                userSelect="none"
-                cursor="pointer"
-                h={["0px", "0px", "40px"]}
-                display={["none", null, null, "flex"]}
-                fontSize="sm"
-                align="center"
-              >
-                <Text fontWeight={550} pr="0.75rem">
-                  {item.id}
-                </Text>
+          <LayoutGroup>
+            {navItems.map((item) => (
+              <NavItem
+                url={item.url}
+                key={item.id}
+                text={item.name}
+                icon={item.icon}
+                handleClick={() => setSelected(item.id)}
+                handleLeave={getPath}
+                selected={selected === item.id}
+              />
+            ))}
+          </LayoutGroup>
 
-                <Icon as={item.icon} />
-              </Flex>
-            </Link>
-          ))}
           <Spacer />
           <HStack spacing={4}>
             <InputGroup cursor="pointer" w="200px" variant="filled">
@@ -234,7 +291,7 @@ const Navbar = () => {
                   <Stack spacing={0}>
                     <HStack onClick={onClose} cursor="pointer" px={1} py={4}>
                       <Text fontWeight={500} fontSize="sm">
-                        {item.id}
+                        {item.name}
                       </Text>
                       <Spacer />
                       <Icon h="12px" w="12px" as={BsChevronRight} />

@@ -303,10 +303,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     pe={[2, null, 6]}
                     py={2.5}
                   >
-                    <Link
-                      href={`cryptocurrencies/[id]`}
-                      as={`cryptocurrencies/${coin.id}`}
-                    >
+                    <Link href={`cryptocurrencies/${coin.id}`}>
                       <HStack
                         w="165px"
                         ps={4}
@@ -354,19 +351,10 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     </Link>
                   </Td>
 
-                  <Link
-                    href={`cryptocurrencies/[id]`}
-                    as={`cryptocurrencies/${coin.id}`}
-                  >
+                  <Link href={`cryptocurrencies/${coin.id}`}>
                     <Td whiteSpace="nowrap" isNumeric pr={2}>
                       <Text>
-                        {getCurrencyFormat(
-                          currency,
-                          coin.current_price.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 6,
-                          })
-                        )}
+                        {getCurrencyFormat(currency, coin.current_price)}
                       </Text>
                     </Td>
                   </Link>
@@ -379,10 +367,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     <Text>{getColouredNum(coin.change7d)}</Text>
                   </Td>
 
-                  <Link
-                    href={`cryptocurrencies/[id]`}
-                    as={`cryptocurrencies/${coin.id}`}
-                  >
+                  <Link href={`cryptocurrencies/${coin.id}`}>
                     <Td whiteSpace="nowrap" isNumeric px={2}>
                       {currency.type === "FIAT" ? (
                         <>
@@ -408,10 +393,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                       )}
                     </Td>
                   </Link>
-                  <Link
-                    href={`cryptocurrencies/[id]`}
-                    as={`cryptocurrencies/${coin.id}`}
-                  >
+                  <Link href={`cryptocurrencies/${coin.id}`}>
                     <Td whiteSpace="nowrap" isNumeric px={2}>
                       {currency.type === "FIAT" ? (
                         <>
@@ -438,10 +420,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     </Td>
                   </Link>
 
-                  <Link
-                    href={`cryptocurrencies/[id]`}
-                    as={`cryptocurrencies/${coin.id}`}
-                  >
+                  <Link href={`cryptocurrencies/${coin.id}`}>
                     <Td isNumeric px={2}>
                       <Text whiteSpace="nowrap">
                         {`${coin.circulating_supply.toLocaleString(undefined, {
@@ -451,10 +430,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     </Td>
                   </Link>
 
-                  <Link
-                    href={`cryptocurrencies/[id]`}
-                    as={`cryptocurrencies/${coin.id}`}
-                  >
+                  <Link href={`/cryptocurrencies/${coin.id}`}>
                     <Td
                       w="120px"
                       overflow="hidden"
@@ -496,10 +472,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                       <PopoverContent me={2} w="auto">
                         <PopoverArrow ms={1} />
                         <PopoverBody>
-                          <Link
-                            href={`cryptocurrencies/[id]`}
-                            as={`cryptocurrencies/${coin.id}`}
-                          >
+                          <Link href={`cryptocurrencies/${coin.id}`}>
                             <Text
                               cursor="pointer"
                               fontSize="small"

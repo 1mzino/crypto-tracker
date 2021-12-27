@@ -12,11 +12,7 @@ import Link from "next/link";
 
 const CarouselDetail = ({ coinData }) => {
   return (
-    <Link
-      prefetch={false}
-      href={`cryptocurrencies/[id]`}
-      as={`cryptocurrencies/${coinData.id}`}
-    >
+    <Link href={`/cryptocurrencies/${coinData.id}`}>
       <HStack
         pos="relative"
         as="a"

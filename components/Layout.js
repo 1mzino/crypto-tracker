@@ -6,7 +6,7 @@ import Header from "./Header";
 
 const Layout = ({ children }) => {
   return (
-    <Box minH="100vh" minW="100vw">
+    <Flex flexDir="column" minH="100vh" minW="100vw">
       <Box zIndex={2} bg={useColorModeValue("white", "gray.900")}>
         <Container
           // Display set to flex, so that flexOrder can be used on children
@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
       </Box>
 
       <Box
-        flex={1}
+        flexGrow={1}
         zIndex={1}
         bgGradient={useColorModeValue(
           "",
@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
           <Footer />
         </Container>
       </Box> */}
-    </Box>
+    </Flex>
   );
 };
 

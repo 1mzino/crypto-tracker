@@ -216,7 +216,7 @@ const coinDetail = () => {
   if (!coin) {
     return (
       <Flex
-        zIndex={0}
+        zIndex={-1}
         pos="absolute"
         top="0"
         left="0"
