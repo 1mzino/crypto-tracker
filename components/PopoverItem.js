@@ -15,7 +15,7 @@ const PopoverItem = ({ title, icon, children }) => {
   return (
     <Popover placement="bottom-start" trigger="hover">
       <PopoverTrigger>
-        <Button p={3} size="xs">
+        <Button py={3.5} px={3} size="xs" fontSize="smaller">
           <Icon as={icon} me={2} />
           {title}
         </Button>
@@ -34,7 +34,7 @@ const PopoverItem = ({ title, icon, children }) => {
             fontSize="xs"
             color={useColorModeValue("gray.700", "gray.300")}
           >
-            <Stack>{children}</Stack>
+            {children}
           </PopoverBody>
         </PopoverContent>
       </Portal>

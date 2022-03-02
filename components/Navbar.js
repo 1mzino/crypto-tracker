@@ -52,8 +52,9 @@ const NavItem = ({ url, text, icon, selected, handleClick, handleLeave }) => {
         onMouseEnter={handleClick}
         onMouseLeave={handleLeave}
         fontSize="sm"
+        py={7}
       >
-        <HStack>
+        <HStack minH="100%">
           <Text fontWeight={550} pr="0.75rem">
             {text}
           </Text>
@@ -66,7 +67,7 @@ const NavItem = ({ url, text, icon, selected, handleClick, handleLeave }) => {
             layoutId="underline"
             zIndex={10}
             pos="absolute"
-            top="215%"
+            top="98%"
             left="0"
             width="100%"
             height="3px"
@@ -92,12 +93,12 @@ const Navbar = () => {
       icon: GiTwoCoins,
       url: "/cryptocurrencies",
     },
-    {
-      id: 2,
-      name: "Exchanges",
-      icon: GiTwoCoins,
-      url: "/exchanges",
-    },
+    // {
+    //   id: 2,
+    //   name: "Exchanges",
+    //   icon: GiTwoCoins,
+    //   url: "/exchanges",
+    // },
   ];
 
   const { currency, dispatch } = useContext(CurrencyContext);
@@ -180,14 +181,7 @@ const Navbar = () => {
     <>
       {/* DESKTOP */}
       <Box display={["none", null, null, "block"]}>
-        <HStack
-          as="nav"
-          w="100%"
-          userSelect="none"
-          align="center"
-          py={4}
-          spacing={16}
-        >
+        <HStack as="nav" w="100%" userSelect="none" align="center" spacing={16}>
           <LayoutGroup>
             {navItems.map((item) => (
               <NavItem

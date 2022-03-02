@@ -248,7 +248,7 @@ const coinDetail = () => {
       <Flex flexDir={["column", null, "row"]} flexWrap="wrap">
         <Stack
           mt={[4, null, 2]}
-          mb={[4]}
+          mb={2}
           flexBasis="40%"
           spacing={4}
           justify={["flex-start", null, "center"]}
@@ -278,7 +278,7 @@ const coinDetail = () => {
               {coin.symbol.toUpperCase()}
             </Tag>
 
-            {coin.category.length > 0 && (
+            {coin.category.length > 1 && (
               <Tag overflow="hidden" whiteSpace="nowrap" fontSize="x-small">
                 {coin.category[0]}
               </Tag>

@@ -279,7 +279,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
             </Tr>
           </Thead>
 
-          <Tbody>
+          <Tbody fontSize="small">
             {_.orderBy(tableData, columnToSort, sortDirection).map(
               (coin, i) => (
                 <Tr
@@ -469,8 +469,15 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                           icon={<BsThreeDotsVertical />}
                         />
                       </PopoverTrigger>
-                      <PopoverContent me={2} w="auto">
-                        <PopoverArrow ms={1} />
+                      <PopoverContent
+                        me={2}
+                        w="auto"
+                        bg={useColorModeValue("white", "gray.800")}
+                      >
+                        <PopoverArrow
+                          ms={1}
+                          bg={useColorModeValue("white", "gray.800")}
+                        />
                         <PopoverBody>
                           <Link href={`cryptocurrencies/${coin.id}`}>
                             <Text

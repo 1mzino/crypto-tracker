@@ -7,23 +7,27 @@ import {
   Flex,
   HStack,
 } from "@chakra-ui/react";
-
+import { motion } from "framer-motion";
+const MotionHStack = motion(HStack);
 import Link from "next/link";
 
 const CarouselDetail = ({ coinData }) => {
   return (
     <Link href={`/cryptocurrencies/${coinData.id}`}>
-      <HStack
+      <MotionHStack
+        h={20}
+        whileTap={{ scale: 1.01 }}
+        transition={{ type: "spring", stiffness: 130 }}
         pos="relative"
         as="a"
         minW="275px"
-        py={6}
-        px={4}
+        p={2}
+        // px={4}
         me={2}
         userSelect="none"
         bg={useColorModeValue("white", "gray.900")}
         borderRadius="md"
-        boxShadow="sm"
+        shadow="sm"
         cursor="pointer"
         spacing={2}
       >
@@ -40,7 +44,7 @@ const CarouselDetail = ({ coinData }) => {
         <Text isTruncated fontSize="sm" fontWeight={600}>
           {coinData.name}
         </Text>
-      </HStack>
+      </MotionHStack>
     </Link>
   );
 };

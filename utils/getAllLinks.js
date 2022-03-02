@@ -13,6 +13,7 @@ const GetAllLinks = ({ links, handleClick }) => {
             borderRadius="none"
             ps={3}
             pe={8}
+            py={4}
             size="xs"
             bg="none"
             justifyContent="flex-start"
