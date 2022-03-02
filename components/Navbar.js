@@ -41,15 +41,22 @@ import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { BsChevronRight } from "react-icons/bs";
 
 const MotionBox = motion(Box);
-const NavItem = ({ url, text, icon, selected, handleClick, handleLeave }) => {
+const NavItem = ({
+  url,
+  text,
+  icon,
+  selected,
+  handleAnimation,
+  handleLeave,
+}) => {
   return (
     <Link href={url}>
       <MotionBox
         as="a"
         pos="relative"
         cursor="pointer"
-        onClick={handleClick}
-        onMouseEnter={handleClick}
+        onClick={handleAnimation}
+        onMouseEnter={handleAnimation}
         onMouseLeave={handleLeave}
         fontSize="sm"
         py={7}
@@ -79,26 +86,27 @@ const NavItem = ({ url, text, icon, selected, handleClick, handleLeave }) => {
     </Link>
   );
 };
+
 const Navbar = () => {
   const navItems = [
+    // {
+    //   id: 0,
+    //   name: "Home",
+    //   icon: FaHome,
+    //   url: "/",
+    // },
     {
       id: 0,
-      name: "Home",
-      icon: FaHome,
+      name: "Cryptocurrencies",
+      icon: GiTwoCoins,
       url: "/",
     },
     {
       id: 1,
-      name: "Cryptocurrencies",
+      name: "Exchanges",
       icon: GiTwoCoins,
-      url: "/cryptocurrencies",
+      url: "/exchanges",
     },
-    // {
-    //   id: 2,
-    //   name: "Exchanges",
-    //   icon: GiTwoCoins,
-    //   url: "/exchanges",
-    // },
   ];
 
   const { currency, dispatch } = useContext(CurrencyContext);
@@ -189,7 +197,7 @@ const Navbar = () => {
                 key={item.id}
                 text={item.name}
                 icon={item.icon}
-                handleClick={() => setSelected(item.id)}
+                handleAnimation={() => setSelected(item.id)}
                 handleLeave={getPath}
                 selected={selected === item.id}
               />

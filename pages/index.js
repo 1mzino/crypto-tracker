@@ -21,7 +21,7 @@ import coinService from "../fetchers/coin";
 import { getRoundedNum } from "../utils/getRoundedNumber";
 import { getColouredNum } from "../utils/getColoredNumber";
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const globalMarketData = await coinService.getMarketData();
   const trendingCoins = await coinService.getTrendingCoins();
   const tableData = await coinService.getTableData();
