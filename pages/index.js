@@ -40,6 +40,7 @@ export const getServerSideProps = async () => {
 
 export default function Home({ fallback }) {
   const { currency } = useContext(CurrencyContext);
+  console.log("CURRENCY", currency);
   const [pageIndex, setPageIndex] = useState(1);
 
   const { data: globalMarketData } = useSWR(

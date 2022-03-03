@@ -109,34 +109,19 @@ const CurrencySelector = ({ onClose }) => {
         bg={useColorModeValue("white", "gray.800")}
         fontSize="sm"
       >
-        <MenuItem
-          fontWeight={500}
-          onClick={() => {
-            dispatch({ type: "GBP" });
-            onClose();
-          }}
-        >
-          <Text>GBP</Text>
-        </MenuItem>
-        <MenuItem
-          fontWeight={500}
-          onClick={() => {
-            dispatch({ type: "USD" });
-            onClose();
-          }}
-        >
-          USD
-        </MenuItem>
-
-        <MenuItem
-          fontWeight={500}
-          onClick={() => {
-            dispatch({ type: "BTC" });
-            onClose();
-          }}
-        >
-          BTC
-        </MenuItem>
+        {supportedCurrencies.map((supportedCurrency) => (
+          <MenuItem
+            key={supportedCurrency.name}
+            fontWeight={500}
+            pl={4}
+            onClick={() => {
+              dispatch({ type: supportedCurrency.abv });
+              onClose();
+            }}
+          >
+            {<Text>{supportedCurrency.abv}</Text>}
+          </MenuItem>
+        ))}
       </MenuList>
     </Menu>
   );

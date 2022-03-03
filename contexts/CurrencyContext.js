@@ -4,17 +4,6 @@ import { currencyReducer } from "../reducers/currencyReducer";
 const CurrencyContext = createContext();
 
 const CurrencyProvider = ({ children }) => {
-  useEffect(() => {
-    if (localStorage.getItem("supportedCurrencies") === null) return;
-
-    dispatch({
-      type: "GBP",
-      supportedCurrencies: JSON.parse(
-        localStorage.getItem("supportedCurrencies")
-      ),
-    });
-  }, []);
-
   const [currency, dispatch] = useReducer(currencyReducer, {
     shorthand: "GBP",
     symbol: "£",
