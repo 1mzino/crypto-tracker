@@ -83,10 +83,6 @@ const coinDetail = () => {
     fetcher
   );
 
-  if (coin) {
-    console.log(coin);
-  }
-
   // return (
   //   <Stack
   //     as="section"
@@ -240,6 +236,7 @@ const coinDetail = () => {
       flexDir="column"
       as="main"
       borderRadius="xl"
+      mt={2}
       px={4}
       py={2}
       bg={useColorModeValue("white", "gray.900")}
@@ -278,9 +275,10 @@ const coinDetail = () => {
               {coin.symbol.toUpperCase()}
             </Tag>
 
-            {coin.category.length > 1 && (
+            {coin.category.filter((category) => category !== null).length >
+              0 && (
               <Tag overflow="hidden" whiteSpace="nowrap" fontSize="x-small">
-                {coin.category[0]}
+                {coin.category.filter((category) => category !== null)[0]}
               </Tag>
             )}
           </HStack>
