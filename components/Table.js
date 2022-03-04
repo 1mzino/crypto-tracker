@@ -54,7 +54,6 @@ import { getColouredNum } from "../utils/getColoredNumber";
 import { getCurrencyFormat } from "../utils/getCurrencyFormat";
 
 const CoinTable = ({ data, pageIndex, setPageIndex }) => {
-  //global currency prop
   const { currency } = useContext(CurrencyContext);
 
   //initial table data prefetched, data is displayed depending on which currency is selected
@@ -85,7 +84,6 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
     desc: "asc",
   };
 
-  //handle sort when user clicks on a column
   const handleSort = (columnName) => {
     setColumnToSort(columnName);
     setSortDirection(
@@ -296,16 +294,17 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                   </Td>
 
                   <Td
-                    cursor="pointer"
                     pos="sticky"
                     left="0"
-                    ps={0}
-                    pe={[2, null, 6]}
+                    px={0}
+                    // pe={[2, null, 6]}
+
                     py={2.5}
                   >
                     <Link href={`cryptocurrencies/${coin.id}`}>
                       <HStack
-                        w="165px"
+                        cursor="pointer"
+                        maxW="fit-content"
                         ps={4}
                         // pe={8}
                         spacing={4}
@@ -351,13 +350,13 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     </Link>
                   </Td>
 
-                  <Link href={`cryptocurrencies/${coin.id}`}>
-                    <Td whiteSpace="nowrap" isNumeric pr={2}>
-                      <Text>
+                  <Td whiteSpace="nowrap" isNumeric pr={2}>
+                    <Link href={`cryptocurrencies/${coin.id}`}>
+                      <Text cursor="pointer" maxW="fit-content">
                         {getCurrencyFormat(currency, coin.current_price)}
                       </Text>
-                    </Td>
-                  </Link>
+                    </Link>
+                  </Td>
 
                   <Td isNumeric px={2}>
                     <Text>{getColouredNum(coin.change24h)}</Text>
@@ -367,10 +366,10 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     <Text>{getColouredNum(coin.change7d)}</Text>
                   </Td>
 
-                  <Link href={`cryptocurrencies/${coin.id}`}>
-                    <Td whiteSpace="nowrap" isNumeric px={2}>
+                  <Td whiteSpace="nowrap" isNumeric px={2}>
+                    <Link href={`cryptocurrencies/${coin.id}`}>
                       {currency.type === "FIAT" ? (
-                        <>
+                        <Box cursor="pointer" maxW="fit-content">
                           <Text display={[null, null, null, "none"]}>
                             {`${currency.symbol}${getRoundedNum(
                               coin.market_cap
@@ -383,20 +382,22 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                               maximumFractionDigits: 2,
                             })}`}
                           </Text>
-                        </>
+                        </Box>
                       ) : (
-                        <Text>
-                          {`${coin.market_cap.toLocaleString(undefined, {
-                            minimumFractionDigits: 0,
-                          })} ${currency.symbol}`}
-                        </Text>
+                        <Box cursor="pointer" maxW="fit-content">
+                          <Text>
+                            {`${coin.market_cap.toLocaleString(undefined, {
+                              minimumFractionDigits: 0,
+                            })} ${currency.symbol}`}
+                          </Text>
+                        </Box>
                       )}
-                    </Td>
-                  </Link>
-                  <Link href={`cryptocurrencies/${coin.id}`}>
-                    <Td whiteSpace="nowrap" isNumeric px={2}>
+                    </Link>
+                  </Td>
+                  <Td whiteSpace="nowrap" isNumeric px={2}>
+                    <Link href={`cryptocurrencies/${coin.id}`}>
                       {currency.type === "FIAT" ? (
-                        <>
+                        <Box cursor="pointer" maxW="fit-content">
                           <Text display={[null, null, null, "none"]}>
                             {`${currency.symbol}${getRoundedNum(
                               coin.total_volume
@@ -409,56 +410,66 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                               maximumFractionDigits: 2,
                             })}`}
                           </Text>
-                        </>
+                        </Box>
                       ) : (
-                        <Text>
-                          {`${coin.total_volume.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                          })} ${currency.symbol}`}
-                        </Text>
+                        <Box cursor="pointer" maxW="fit-content">
+                          <Text>
+                            {`${coin.total_volume.toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                            })} ${currency.symbol}`}
+                          </Text>
+                        </Box>
                       )}
-                    </Td>
-                  </Link>
+                    </Link>
+                  </Td>
 
-                  <Link href={`cryptocurrencies/${coin.id}`}>
-                    <Td isNumeric px={2}>
-                      <Text whiteSpace="nowrap">
-                        {`${coin.circulating_supply.toLocaleString(undefined, {
-                          maximumFractionDigits: 0,
-                        })} ${coin.symbol.toUpperCase()}`}
-                      </Text>
-                    </Td>
-                  </Link>
+                  <Td isNumeric px={2}>
+                    <Link href={`cryptocurrencies/${coin.id}`}>
+                      <Box cursor="pointer" maxW="fit-content">
+                        <Text whiteSpace="nowrap">
+                          {`${coin.circulating_supply.toLocaleString(
+                            undefined,
+                            {
+                              maximumFractionDigits: 0,
+                            }
+                          )} ${coin.symbol.toUpperCase()}`}
+                        </Text>
+                      </Box>
+                    </Link>
+                  </Td>
 
-                  <Link href={`/cryptocurrencies/${coin.id}`}>
-                    <Td
-                      w="120px"
-                      overflow="hidden"
-                      whiteSpace="nowrap"
-                      ps={4}
-                      pe={2}
-                    >
-                      <Sparklines data={coin.sparklines} svgHeight={35}>
-                        {coin.change7d[currency.shorthand.toLowerCase()] < 0 ? (
-                          <SparklinesLine
-                            style={{
-                              strokeWidth: "2.5",
-                              stroke: "#d44c46",
-                              fill: "none",
-                            }}
-                          />
-                        ) : (
-                          <SparklinesLine
-                            style={{
-                              strokeWidth: "2.5",
-                              stroke: "#3CB371",
-                              fill: "none",
-                            }}
-                          />
-                        )}
-                      </Sparklines>
-                    </Td>
-                  </Link>
+                  <Td
+                    w="120px"
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                    ps={4}
+                    pe={2}
+                  >
+                    <Link href={`/cryptocurrencies/${coin.id}`}>
+                      <Box cursor="pointer" maxW="fit-content">
+                        <Sparklines data={coin.sparklines} svgHeight={35}>
+                          {coin.change7d[currency.shorthand.toLowerCase()] <
+                          0 ? (
+                            <SparklinesLine
+                              style={{
+                                strokeWidth: "2.5",
+                                stroke: "#d44c46",
+                                fill: "none",
+                              }}
+                            />
+                          ) : (
+                            <SparklinesLine
+                              style={{
+                                strokeWidth: "2.5",
+                                stroke: "#3CB371",
+                                fill: "none",
+                              }}
+                            />
+                          )}
+                        </Sparklines>
+                      </Box>
+                    </Link>
+                  </Td>
                   <Td cursor="pointer" px={2}>
                     <Popover strategy="fixed">
                       <PopoverTrigger>
