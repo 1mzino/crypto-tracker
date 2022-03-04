@@ -34,8 +34,7 @@ import { CurrencyContext } from "../contexts/CurrencyContext";
 import CurrencySelector from "./CurrencySelector";
 
 import { BiSearch } from "react-icons/bi";
-import { FaHome, FaMoon, FaSun } from "react-icons/fa";
-
+import { FaExchangeAlt, FaMoon, FaSun } from "react-icons/fa";
 import { GiTwoCoins } from "react-icons/gi";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { BsChevronRight } from "react-icons/bs";
@@ -104,7 +103,7 @@ const Navbar = () => {
     {
       id: 1,
       name: "Exchanges",
-      icon: GiTwoCoins,
+      icon: FaExchangeAlt,
       url: "/exchanges",
     },
   ];
@@ -212,7 +211,7 @@ const Navbar = () => {
                 cursor="pointer"
                 fontSize="xs"
                 fontWeight={500}
-                placeholder="Search Crypto..."
+                placeholder="Search"
                 _placeholder={{
                   color: useColorModeValue("gray.600", "gray.400"),
                 }}
