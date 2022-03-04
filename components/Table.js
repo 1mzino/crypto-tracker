@@ -125,7 +125,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                 pos="sticky"
                 left="0"
                 ps={0}
-                pe={[2, null, 6]}
+                pe={[0, null, 6]}
               >
                 <Text
                   bg={useColorModeValue("white", "gray.900")}
@@ -301,53 +301,64 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
 
                     py={2.5}
                   >
-                    <Link href={`cryptocurrencies/${coin.id}`}>
-                      <HStack
-                        cursor="pointer"
-                        maxW="fit-content"
-                        ps={4}
-                        // pe={8}
-                        spacing={4}
-                        _groupHover={{
-                          bg: useColorModeValue("gray.100", "gray.800"),
-                          transition: "ease-in 0.15s",
-                        }}
-                        bg={useColorModeValue("white", "gray.900")}
-                      >
-                        <Image
-                          objectFit="contain"
-                          w="26px"
-                          borderRadius="20%"
-                          src={coin.image}
-                          alt=""
-                        />
-                        <Stack fontWeight={600} spacing={1}>
-                          <Text>{coin.name}</Text>
-                          <Text
-                            display={["none", null, null, "initial"]}
-                            fontSize="xs"
-                            color={useColorModeValue("gray.500", "gray.200")}
-                          >
-                            {coin.symbol.toUpperCase()}
-                          </Text>
-                          <HStack display={["flex", null, null, "none"]}>
+                    <Box
+                      w="165px"
+                      _groupHover={{
+                        bg: useColorModeValue("gray.100", "gray.800"),
+                        transition: "ease-in 0.15s",
+                      }}
+                      bg={useColorModeValue("white", "gray.900")}
+                    >
+                      <Link href={`cryptocurrencies/${coin.id}`}>
+                        <HStack
+                          w="fit-content"
+                          cursor="pointer"
+                          ps={4}
+                          spacing={4}
+                          // _groupHover={{
+                          //   bg: useColorModeValue("gray.100", "gray.800"),
+                          //   transition: "ease-in 0.15s",
+                          // }}
+                          // bg={useColorModeValue("white", "gray.900")}
+                        >
+                          <Image
+                            objectFit="contain"
+                            w="26px"
+                            borderRadius="20%"
+                            src={coin.image}
+                            alt=""
+                          />
+                          <Stack fontWeight={600} spacing={1}>
+                            <Text>{coin.name}</Text>
                             <Text
-                              px={1.5}
-                              borderRadius="md"
-                              bg={useColorModeValue("gray.100", "gray.700")}
-                            >
-                              {coin.market_cap_rank}
-                            </Text>
-                            <Text
+                              display={["none", null, null, "initial"]}
                               fontSize="xs"
                               color={useColorModeValue("gray.500", "gray.200")}
                             >
                               {coin.symbol.toUpperCase()}
                             </Text>
-                          </HStack>
-                        </Stack>
-                      </HStack>
-                    </Link>
+                            <HStack display={["flex", null, null, "none"]}>
+                              <Text
+                                px={1.5}
+                                borderRadius="md"
+                                bg={useColorModeValue("gray.100", "gray.700")}
+                              >
+                                {coin.market_cap_rank}
+                              </Text>
+                              <Text
+                                fontSize="xs"
+                                color={useColorModeValue(
+                                  "gray.500",
+                                  "gray.200"
+                                )}
+                              >
+                                {coin.symbol.toUpperCase()}
+                              </Text>
+                            </HStack>
+                          </Stack>
+                        </HStack>
+                      </Link>
+                    </Box>
                   </Td>
 
                   <Td whiteSpace="nowrap" isNumeric pr={2}>
@@ -369,7 +380,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                   <Td whiteSpace="nowrap" isNumeric px={2}>
                     <Link href={`cryptocurrencies/${coin.id}`}>
                       {currency.type === "FIAT" ? (
-                        <Box cursor="pointer" maxW="fit-content">
+                        <Box cursor="pointer" w="fit-content" float="right">
                           <Text display={[null, null, null, "none"]}>
                             {`${currency.symbol}${getRoundedNum(
                               coin.market_cap
@@ -394,16 +405,16 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                       )}
                     </Link>
                   </Td>
-                  <Td whiteSpace="nowrap" isNumeric px={2}>
+                  <Td whiteSpace="nowrap" px={2}>
                     <Link href={`cryptocurrencies/${coin.id}`}>
                       {currency.type === "FIAT" ? (
-                        <Box cursor="pointer" maxW="fit-content">
-                          <Text display={[null, null, null, "none"]}>
+                        <Box cursor="pointer" w="fit-content" float="right">
+                          {/* <Text display={[null, null, null, "none"]}>
                             {`${currency.symbol}${getRoundedNum(
                               coin.total_volume
                             )}`}
-                          </Text>
-                          <Text display={["none", null, null, "initial"]}>
+                          </Text> */}
+                          <Text>
                             {`${
                               currency.symbol
                             }${coin.total_volume.toLocaleString(undefined, {
@@ -425,16 +436,16 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
 
                   <Td isNumeric px={2}>
                     <Link href={`cryptocurrencies/${coin.id}`}>
-                      <Box cursor="pointer" maxW="fit-content">
-                        <Text whiteSpace="nowrap">
-                          {`${coin.circulating_supply.toLocaleString(
-                            undefined,
-                            {
-                              maximumFractionDigits: 0,
-                            }
-                          )} ${coin.symbol.toUpperCase()}`}
-                        </Text>
-                      </Box>
+                      <Text
+                        float="right"
+                        cursor="pointer"
+                        w="fit-content"
+                        whiteSpace="nowrap"
+                      >
+                        {`${coin.circulating_supply.toLocaleString(undefined, {
+                          maximumFractionDigits: 0,
+                        })} ${coin.symbol.toUpperCase()}`}
+                      </Text>
                     </Link>
                   </Td>
 
