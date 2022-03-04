@@ -38,6 +38,7 @@ import { CurrencyContext } from "../contexts/CurrencyContext";
 
 import CurrencyIcon from "./CurrencyIcon";
 
+// hard coded array to differentiate FIAT from CRYPTO
 const supportedCurrencies = [
   {
     name: "Pound Sterling",

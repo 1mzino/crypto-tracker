@@ -21,10 +21,16 @@ import coinService from "../fetchers/coin";
 import { getRoundedNum } from "../utils/getRoundedNumber";
 import { getColouredNum } from "../utils/getColoredNumber";
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const globalMarketData = await coinService.getMarketData();
   const trendingCoins = await coinService.getTrendingCoins();
   const tableData = await coinService.getTableData();
+
+  /* ideally prefetch supported currencies to make use of all currencies available,
+  then store supported currencies in browsers cache to make available for use in 
+  currency selector component, however API currently doesnt offer any ways to differentiate
+  FIAT from CRYPTO, therefore supported currencies will be limited to array (see currencyselector component)
+  */
 
   return {
     props: {
@@ -43,6 +49,7 @@ export default function Home({ fallback }) {
   console.log("CURRENCY", currency);
   const [pageIndex, setPageIndex] = useState(1);
 
+  // useSWR to revalidate props
   const { data: globalMarketData } = useSWR(
     "https://api.coingecko.com/api/v3/global",
     async (url) => {
