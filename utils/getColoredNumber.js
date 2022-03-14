@@ -2,6 +2,7 @@ import { Text, Icon } from "@chakra-ui/react";
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 
 export const getColouredNum = (num) => {
+  if (!num) return;
   if (num < 0) {
     return (
       <Text whiteSpace="nowrap" as="span" color="red.500" fontWeight={600}>

@@ -46,10 +46,8 @@ export const getStaticProps = async () => {
 
 export default function Home({ fallback }) {
   const { currency } = useContext(CurrencyContext);
-  console.log("CURRENCY", currency);
   const [pageIndex, setPageIndex] = useState(1);
 
-  // useSWR to revalidate props
   const { data: globalMarketData } = useSWR(
     "https://api.coingecko.com/api/v3/global",
     async (url) => {
