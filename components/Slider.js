@@ -27,7 +27,8 @@ const Slider = ({ coin }) => {
     setMenuCaption(e.target.value);
   };
 
-  return (
+  return coin.market_data.atl_24h[currency.shorthand.toLowerCase()] |
+    coin.market_data.ath_24h[currency.shorthand.toLowerCase()] ? (
     <Flex
       my={1}
       flexDir="column"
@@ -125,7 +126,7 @@ const Slider = ({ coin }) => {
         </SliderTrack>
       </ChakraSlider>
     </Flex>
-  );
+  ) : null;
 };
 
 export default Slider;
