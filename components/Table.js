@@ -129,7 +129,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
               >
                 <Text
                   bg={useColorModeValue("white", "gray.900")}
-                  w="165px"
+                  w="170px"
                   ps={4}
                 >
                   Name
@@ -302,7 +302,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
                     py={2.5}
                   >
                     <Box
-                      w="165px"
+                      w="170px"
                       _groupHover={{
                         bg: useColorModeValue("gray.100", "gray.800"),
                         transition: "ease-in 0.15s",
@@ -363,7 +363,7 @@ const CoinTable = ({ data, pageIndex, setPageIndex }) => {
 
                   <Td whiteSpace="nowrap" isNumeric pr={2}>
                     <Link href={`cryptocurrencies/${coin.id}`}>
-                      <Text cursor="pointer" maxW="fit-content">
+                      <Text cursor="pointer" maxW="fit-content" float="right">
                         {getCurrencyFormat(currency, coin.current_price)}
                       </Text>
                     </Link>
