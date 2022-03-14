@@ -24,6 +24,8 @@ import {
   DrawerCloseButton,
 } from "@chakra-ui/react";
 
+import useSWR from "swr";
+
 import { useState, useEffect, useRef, useContext } from "react";
 import router, { useRouter } from "next/router";
 
@@ -38,6 +40,7 @@ import { FaExchangeAlt, FaMoon, FaSun } from "react-icons/fa";
 import { GiTwoCoins } from "react-icons/gi";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { BsChevronRight } from "react-icons/bs";
+import SearchBar from "./SearchBar";
 
 const MotionBox = motion(Box);
 const NavItem = ({
@@ -204,8 +207,9 @@ const Navbar = () => {
           </LayoutGroup>
 
           <Spacer />
-          <HStack spacing={4}>
-            <InputGroup cursor="pointer" w="200px" variant="filled">
+          <Flex>
+            <SearchBar />
+            {/* <InputGroup cursor="pointer" w="200px" variant="filled">
               <InputLeftElement color="gray.500" children={<BiSearch />} />
               <Input
                 cursor="pointer"
@@ -216,8 +220,8 @@ const Navbar = () => {
                   color: useColorModeValue("gray.600", "gray.400"),
                 }}
               />
-            </InputGroup>
-            <Box as="button" onClick={toggleColorMode} p={2} bg="none">
+            </InputGroup> */}
+            <Box as="button" onClick={toggleColorMode} ml={4} p={2} bg="none">
               <Center>
                 <Icon h="14px" w="14px" as={useColorModeValue(FaMoon, FaSun)} />
               </Center>
@@ -229,7 +233,7 @@ const Navbar = () => {
                 dispatch={dispatch}
               />
             </Box>
-          </HStack>
+          </Flex>
         </HStack>
 
         <Divider pos="absolute" left="0" />
