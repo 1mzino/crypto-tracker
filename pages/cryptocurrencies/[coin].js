@@ -269,7 +269,9 @@ const coinDetail = () => {
 
           <HStack>
             <Tag overflow="hidden" whiteSpace="nowrap" fontSize="x-small">
-              {`Rank #${coin.market_cap_rank}`}
+              {!coin.market_cap_rank
+                ? "Unranked"
+                : `Rank #${coin.market_cap_rank}`}
             </Tag>
             <Tag overflow="hidden" whiteSpace="nowrap" fontSize="x-small">
               {coin.symbol.toUpperCase()}
@@ -298,15 +300,19 @@ const coinDetail = () => {
               justify={["space-between", null, "flex-start"]}
             >
               <Text fontSize={["2xl", null, null, "3xl"]} fontWeight={700}>
-                {getCurrencyFormat(
-                  currency,
-                  coin.market_data.current_price[
-                    currency.shorthand.toLowerCase()
-                  ].toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 6,
-                  })
-                )}
+                {coin.market_data.current_price[
+                  currency.shorthand.toLowerCase()
+                ]
+                  ? getCurrencyFormat(
+                      currency,
+                      coin.market_data.current_price[
+                        currency.shorthand.toLowerCase()
+                      ].toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 6,
+                      })
+                    )
+                  : "No Price Available"}
               </Text>
 
               <Text
@@ -317,7 +323,7 @@ const coinDetail = () => {
                     currency.shorthand.toLowerCase()
                   ] > 0
                     ? "green.500"
-                    : "red.600"
+                    : "red.500"
                 }
                 px={2}
                 py={1}
