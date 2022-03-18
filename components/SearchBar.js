@@ -18,6 +18,7 @@ import useSWR from "swr";
 import { FixedSizeList as List } from "react-window";
 
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const SearchBar = () => {
   const { data: allCoins } = useSWR(
@@ -27,62 +28,71 @@ const SearchBar = () => {
       return res;
     }
   );
-  const [query, setQuery] = useState("");
 
+  const router = useRouter();
+
+  const [query, setQuery] = useState("");
   const [queriedCoins, setQueriedCoins] = useState([]);
+
+  const resetQuery = () => {
+    setQuery("");
+    setQueriedCoins([]);
+  };
 
   const handleQuery = (e) => {
     if (e.target.value === "") {
-      setQuery("");
-      setQueriedCoins([]);
+      resetQuery();
       return;
     }
+
     setQuery(e.target.value);
 
     const matchingQueries = allCoins.filter((coin) =>
       coin.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
-
     setQueriedCoins(matchingQueries);
   };
 
-  const searchInput = useRef(null);
+  const handleClick = (index) => {
+    resetQuery();
+    router.push(`/cryptocurrencies/${queriedCoins[index].id}`);
+  };
+
   const Row = ({ index, style }) => (
     <div style={style}>
-      <Link
+      {/* <Link
         href={`http://localhost:3000/cryptocurrencies/${queriedCoins[index].id}`}
+      > */}
+      <Flex
+        onClick={() => handleClick(index)}
+        borderTopRadius={index === 0 ? "md" : "none"}
+        alignItems="center"
+        cursor="pointer"
+        _hover={{ bg: hoverColor }}
+        px={4}
+        height="full"
       >
-        <Flex
-          onClick={() => setQuery("")}
-          borderTopRadius={index === 0 ? "md" : "none"}
-          alignItems="center"
-          cursor="pointer"
-          _hover={{ bg: hoverColor }}
-          px={4}
-          height="full"
+        <Text
+          isTruncated={queriedCoins[index].id.length <= 40}
+          fontSize="xs"
+          fontWeight={500}
         >
-          <Text
-            isTruncated={queriedCoins[index].id.length <= 40}
-            fontSize="xs"
-            fontWeight={500}
-          >
-            {queriedCoins[index].name}
-          </Text>
-        </Flex>
-      </Link>
+          {queriedCoins[index].name}
+        </Text>
+      </Flex>
+      {/* </Link> */}
     </div>
   );
 
   const queryBG = useColorModeValue("white", "gray.900");
   const hoverColor = useColorModeValue("gray.100", "gray.800");
-  const borderColor = useColorModeValue("gray.100", "gray.600");
+  const borderColor = useColorModeValue("gray.100", "gray.700");
 
   return (
     <Box pos="relative">
       <InputGroup cursor="pointer" w="200px" variant="filled">
         <InputLeftElement color="gray.500" children={<BiSearch />} />
         <Input
-          ref={searchInput}
           value={query}
           onChange={handleQuery}
           type="text"
@@ -103,7 +113,7 @@ const SearchBar = () => {
           </InputRightElement>
         )}
       </InputGroup>
-      {queriedCoins.length > 0 && (
+      {queriedCoins.length > 0 && focus && (
         <Box
           border="1px"
           borderColor={borderColor}
