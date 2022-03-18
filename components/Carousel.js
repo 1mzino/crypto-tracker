@@ -31,7 +31,6 @@ const Carousel = ({ data }) => {
 
   const handleScroll = (e) => {
     const scrollPosition = e.target.scrollLeft;
-    console.log(scrollPosition);
 
     if (scrollPosition === 0) {
       return setIsArrowDisplayed({
